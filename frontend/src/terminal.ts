@@ -1877,7 +1877,7 @@ setTimeout(()=>{
    this.resetTerminalDisplay();
 
    this.terminal.write(
-    '\x1b[38;5;208mConnecting to 唐云·CloudSSH·www.tyunidc.com\x1b[0m\r\n\r\n'
+    '\x1b[38;5;208mConnecting to 小财云·CloudSSH·www.xcyunidc.com\x1b[0m\r\n\r\n'
   );
 
 }
