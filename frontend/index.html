@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html class="dark" lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon01.svg" />
+  <title>唐云 Cloud·webSSH</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "background": "var(--bg)",
+          "elevated": "var(--bg-elevated)",
+          "on-surface": "var(--on-surface)",
+          "on-surface-variant": "var(--on-surface-variant)",
+          "outline-variant": "var(--border-strong)",
+          "primary-container": "var(--accent)",
+          "on-primary-fixed": "var(--on-accent)",
+          "surface": "var(--bg-surface)",
+          "surface-variant": "var(--surface-dot)",
+          "secondary-container": "var(--accent-secondary)",
+          "secondary-fixed": "var(--accent-secondary-light)",
+          "error": "var(--error)",
+          "error-container": "var(--error-bg)",
+          "surface-container-lowest": "var(--bg-terminal)"
+        },
+        fontFamily: {
+          "body": ["JetBrains Mono"],
+          "headline": ["JetBrains Mono"],
+          "label": ["JetBrains Mono"],
+          "code": ["JetBrains Mono"]
+        }
+      }
+    }
+  }
+  </script>
+  <link rel="stylesheet" href="/src/style.css" />
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</head>
+<body class="min-h-screen font-body text-sm">
+  <div id="app">
+    <!-- Login Page (匿名连接) -->
+
+   <div id="auth-section">
+
+    <div id="connection-form-container"></div>
+
+    </div>
+
+    <!-- User Space Page (登录后) -->
+    <div id="user-space-section" class="hidden min-h-screen flex-col bg-elevated text-on-surface">
+      <!-- TopAppBar -->
+      <header class="flex justify-between items-center w-full px-6 h-16 bg-elevated border-b border-outline-variant z-50">
+        <div class="flex items-center gap-6">
+          <h1 class="text-2xl font-bold text-primary-container tracking-tighter cursor-pointer" id="user-space-logo">CloudSSH</h1>
+        </div>
+        <div class="flex items-center gap-4 flex-wrap">
+          <div id="user-info" class="flex items-center gap-3">
+            <!-- 动态渲染：头像 + 用户名 -->
+          </div>
+          <button id="ai-config-btn" class="hover:opacity-80 transition-opacity cursor-pointer p-1 flex items-center justify-center" title="AI Agent Settings">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">psychology</span>
+          </button>
+          <button id="logout-btn" class="hover:opacity-80 transition-opacity cursor-pointer p-1 flex items-center justify-center text-error" title="Logout">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">logout</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Server List Area -->
+      <main class="flex-1 p-6 relative overflow-auto custom-scrollbar">
+        <div class="scanlines pointer-events-none"></div>
+        <div class="max-w-5xl mx-auto">
+          <!-- 顶部操作栏 -->
+          <div class="flex justify-between items-center mb-6">
+            <div>
+              <h2 class="text-lg font-bold text-primary tracking-[0.1em]">SERVER_LIST</h2>
+              <p class="text-xs text-muted opacity-60 mt-1">Manage your SSH connections</p>
+            </div>
+            <button id="add-server-btn" class="cyber-button text-primary py-2 px-4 text-xs font-bold tracking-[0.1em] uppercase flex items-center gap-2">
+              <span class="material-symbols-outlined" style="font-size: 16px;">add</span>
+              ADD_SERVER
+            </button>
+          </div>
+          <!-- 服务器卡片网格 -->
+          <div id="server-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- 由 JS 动态渲染 -->
+          </div>
+          <!-- 空状态 -->
+          <div id="empty-state" class="hidden flex-col items-center justify-center py-20">
+            <span class="material-symbols-outlined text-dim mb-4" style="font-size: 64px; font-variation-settings: 'FILL' 0;">dns</span>
+            <p class="text-muted text-sm tracking-[0.1em] mb-2">NO_SERVERS_CONFIGURED</p>
+            <p class="text-dim text-xs mb-6">Add a server to get started</p>
+              <button id="empty-add-btn" class="cyber-button text-primary py-2 px-6 text-xs font-bold tracking-[0.1em] uppercase flex items-center gap-2">
+              <span class="material-symbols-outlined" style="font-size: 16px;">add</span>
+              ADD_FIRST_SERVER
+            </button>
+          </div>
+        </div>
+      </main>
+
+      <!-- Footer -->
+     <footer class="px-6 py-2 flex justify-between items-center z-50 bg-elevated border-t border-outline-variant text-xs h-12">
+  <div class="text-secondary-container opacity-60">
+    © <span id="user-copyright-year"></span> 唐云 CloudSSH · 唯一官网·www.tyunidc.com 唯一客服TG· @tyunidc_kf
+  </div>
+</footer>
+    </div>
+
+    <!-- Server Modal (添加/编辑) -->
+    <div id="server-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center">
+      <div class="modal-overlay absolute inset-0" id="modal-backdrop"></div>
+      <div class="cyber-box p-6 shadow-2xl relative z-10 w-full max-w-md mx-4">
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[var(--accent-secondary)] to-transparent opacity-50"></div>
+        <div class="flex items-center justify-between mb-6 pb-4 border-b border-dim">
+          <span id="modal-title" class="text-xs font-bold tracking-[0.1em] text-[var(--accent-secondary)]">ADD_SERVER</span>
+          <button id="modal-close-btn" class="text-muted hover:text-primary transition-colors cursor-pointer">
+            <span class="material-symbols-outlined" style="font-size: 20px;">close</span>
+          </button>
+        </div>
+        <form id="server-form" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold tracking-[0.1em] text-muted mb-2">SERVER_NAME</label>
+            <div class="flex items-center">
+              <span class="material-symbols-outlined text-muted mr-2" style="font-size: 16px;">label</span>
+              <input id="server-name" class="terminal-input text-[13px]" placeholder="My Server" type="text" required>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+            <div class="sm:col-span-3">
+              <label class="block text-xs font-bold tracking-[0.1em] text-muted mb-2">HOST_ADDRESS</label>
+              <div class="flex items-center">
+                <span class="text-muted mr-2">&gt;</span>
+                <input id="server-host" class="terminal-input text-[13px]" placeholder="192.168.1.1" type="text" required>
+              </div>
+            </div>
+            <div class="sm:col-span-1">
+              <label class="block text-xs font-bold tracking-[0.1em] text-muted mb-2">PORT</label>
+              <div class="flex items-center">
+                <span class="text-muted mr-2">:</span>
+                <input id="server-port" class="terminal-input text-[13px]" placeholder="22" type="text" value="22">
+              </div>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold tracking-[0.1em] text-muted mb-2">AUTH_USER</label>
+            <div class="flex items-center">
+              <span class="material-symbols-outlined text-muted mr-2" style="font-size: 16px;">person</span>
+              <input id="server-username" class="terminal-input text-[13px]" placeholder="root" type="text" required>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold tracking-[0.1em] text-muted mb-2">AUTH_METHOD</label>
+            <div class="flex gap-2 mb-3">
+              <button type="button" id="modal-auth-tab-password" class="auth-tab auth-tab-active px-3 py-1 text-[11px] font-bold tracking-[0.1em] cursor-pointer transition-all">PASSWORD</button>
+              <button type="button" id="modal-auth-tab-key" class="auth-tab px-3 py-1 text-[11px] font-bold tracking-[0.1em] cursor-pointer transition-all">PRIVATE_KEY</button>
+            </div>
+            <div id="modal-password-section">
+              <div class="flex items-center">
+                <span class="material-symbols-outlined text-muted mr-2" style="font-size: 16px;">key</span>
+                <input id="server-password" class="terminal-input text-[13px]" placeholder="••••••••" type="password">
+              </div>
+            </div>
+            <div id="modal-key-section" style="display:none;">
+              <textarea id="server-private-key" class="terminal-input text-[11px] w-full" rows="4" placeholder="-----BEGIN OPENSSH PRIVATE KEY-----&#10;...粘贴私钥内容...&#10;-----END OPENSSH PRIVATE KEY-----" style="resize:vertical;border:1px solid var(--border-strong);padding:8px;"></textarea>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold tracking-[0.1em] text-muted mb-2">REGION_HINT</label>
+            <select id="server-region" class="terminal-input text-[13px] cursor-pointer" style="border:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong);padding:6px 8px;">
+              <option value="">自动（保存时由系统推断）</option>
+            </select>
+            <div id="server-region-inferred" class="text-[10px] text-muted mt-1"></div>
+          </div>
+          <div class="pt-2">
+            <button id="server-submit-btn" class="cyber-button w-full py-3 px-4 text-xs font-bold tracking-[0.1em] uppercase flex items-center justify-center gap-2 bg-primary text-on-primary" type="button">
+              <span class="material-symbols-outlined" style="font-size: 18px;">save</span>
+              SAVE_SERVER
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Terminal Page -->
+    <div id="terminal-section" class="hidden h-screen flex-col bg-[#fffaf5] text-gray-900">
+      <!-- TopAppBar -->
+      <header class="flex justify-between items-center w-full px-6 h-16 bg-white border-b border-gray-200 z-50">
+        <div class="flex items-center gap-6">
+          <h1 class="text-2xl font-bold tracking-tighter cursor-pointer">
+            <span class="text-orange-500">唐云</span>
+            <span class="text-neutral-900"> CloudSSH</span>
+          </h1>
+        </div>
+        <div id="terminal-toolbar" class="flex items-center gap-2 sm:gap-4 text-primary-container flex-wrap">
+         <select id="theme-selector" class="bg-surface-variant text-on-surface-variant text-xs py-1 px-2 border-none outline-none cursor-pointer rounded">
+            <option value="cloudssh">CloudSSH</option>
+             <option value="cyberpunk">Cyberpunk</option>
+             <option value="glacier">Glacier</option>
+             <option value="gruvbox">Gruvbox</option>
+         </select>
+          <button id="import-theme-btn" class="hover:opacity-80 transition-opacity cursor-pointer p-1 flex items-center justify-center" title="Import Theme">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">upload_file</span>
+          </button>
+          <input type="file" id="import-theme-input" accept=".json" class="hidden">
+          <button id="sftp-toggle-btn" class="hover:opacity-80 transition-opacity cursor-pointer p-1 flex items-center justify-center" title="SFTP File Manager">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">folder_open</span>
+          </button>
+          <button id="search-btn" class="hover:opacity-80 transition-opacity cursor-pointer p-1 flex items-center justify-center" title="Search (Ctrl+Shift+F)">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">search</span>
+          </button>
+          <button id="export-btn" class="hover:opacity-80 transition-opacity cursor-pointer p-1 flex items-center justify-center" title="Export Terminal Log">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">download</span>
+          </button>
+          <button id="agent-toggle-btn" class="hover:opacity-80 transition-opacity cursor-pointer p-1 flex items-center justify-center hidden" title="AI Agent Assistant">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">psychology</span>
+          </button>
+          <button id="disconnect-btn" class="hover:opacity-80 transition-opacity cursor-pointer p-1 flex items-center justify-center" title="Disconnect">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">power_settings_new</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Tab Bar（标签栏） -->
+      <div id="tab-bar" class="flex items-center bg-[#fffaf5] border-b border-orange-100 px-2 h-10 overflow-x-auto custom-scrollbar gap-0.5"
+           style="scrollbar-width: thin;">
+        <!-- 由 TabManager 动态渲染标签 -->
+        <button id="new-tab-btn" class="tab-new-btn" title="New Connection">
+          <span class="material-symbols-outlined" style="font-size:16px;">add</span>
+        </button>
+      </div>
+
+
+            <!-- Terminal Main Layout -->
+      <div class="flex flex-1 overflow-hidden p-4 gap-4">
+
+        <!-- Server Status Sidebar -->
+        <!-- Server Status Sidebar -->
+       <aside 
+         id="server-sidebar"
+        class="w-72 h-full overflow-y-auto bg-white border border-orange-100 rounded-lg px-5 py-4 shadow-sm mobile-hide-sidebar"
+      >
+
+          <h2 class="text-base font-bold text-gray-800 mb-4 pb-3 border-b border-orange-100 flex items-center gap-2">
+    <span class="material-symbols-outlined text-orange-500"
+          style="font-size:18px; font-variation-settings:'FILL' 0;">
+        dns
+    </span>
+    Connection
+</h2>
+
+
+<div class="space-y-3 text-sm">
+
+
+
+  <!-- 地址 -->
+
+  <div>
+
+    <div class="space-y-3 text-sm">
+
+
+  <div class="flex items-center justify-between gap-3 py-2 border-b border-orange-50">
+    <div class="text-gray-400 whitespace-nowrap flex items-center gap-2">
+    <span class="material-symbols-outlined text-green-500"
+          style="font-size:17px; font-variation-settings:'FILL' 1;">
+        circle
+    </span>
+    状态
+</div>
+
+    <div id="server-status"
+         class="font-mono text-green-600 font-semibold text-right">
+        ONLINE
+    </div>
+</div>
+
+
+
+  <div class="flex items-center justify-between gap-3 py-2 border-b border-orange-50">
+    <div class="text-gray-400 whitespace-nowrap flex items-center gap-2">
+    <span class="material-symbols-outlined text-orange-500"
+          style="font-size:17px; font-variation-settings:'FILL' 0;">
+        language
+    </span>
+    地址
+</div>
+    <div id="connection-host"
+         class="font-mono text-orange-500 font-semibold text-right truncate">
+        --
+    </div>
+</div>
+
+
+  <div class="flex items-center justify-between gap-3 py-2 border-b border-orange-50">
+    <div class="text-gray-400 whitespace-nowrap flex items-center gap-2">
+    <span class="material-symbols-outlined text-orange-500"
+          style="font-size:17px; font-variation-settings:'FILL' 0;">
+        person
+    </span>
+    用户
+</div>
+
+    <div id="server-user"
+         class="text-orange-500 font-semibold text-right truncate">
+        --
+    </div>
+</div>
+
+
+
+  <div class="flex items-center justify-between gap-3 py-2 border-b border-orange-50">
+    <div class="text-gray-400 whitespace-nowrap flex items-center gap-2">
+    <span class="material-symbols-outlined text-orange-500"
+          style="font-size:17px; font-variation-settings:'FILL' 0;">
+        settings_ethernet
+    </span>
+    SSH端口
+</div>
+
+    <div id="connection-port"
+         class="text-orange-500 font-semibold text-right">
+        --
+    </div>
+</div>
+
+
+
+  <div class="flex items-center justify-between gap-3 py-2 border-b border-orange-50">
+    <div class="text-gray-400 whitespace-nowrap flex items-center gap-2">
+    <span class="material-symbols-outlined text-orange-500"
+          style="font-size:17px; font-variation-settings:'FILL' 0;">
+        key
+    </span>
+    登录方式
+</div>
+
+    <div id="server-auth"
+         class="text-orange-500 font-semibold text-right truncate">
+        --
+    </div>
+</div>
+
+
+  <div class="flex items-center justify-between gap-3 py-2">
+    <div class="text-gray-400 whitespace-nowrap flex items-center gap-2">
+    <span class="material-symbols-outlined text-orange-500"
+          style="font-size:17px; font-variation-settings:'FILL' 0;">
+        speed
+    </span>
+    延迟
+</div>
+
+    <div id="server-latency"
+         class="font-mono text-orange-500 font-semibold text-right">
+        --
+    </div>
+</div>
+
+
+    <div class="mt-6 mobile-hide-actions">
+
+
+<h2 class="font-bold text-lg mb-4 flex items-center justify-center gap-2">
+    <span class="material-symbols-outlined text-orange-500"
+          style="font-size:20px; font-variation-settings:'FILL' 0;">
+        bolt
+    </span>
+    快捷操作
+</h2>
+
+  <button id="copy-ssh-btn"
+class="quick-action-btn">
+
+<span class="material-symbols-outlined"
+      style="font-size:17px; vertical-align:middle; margin-right:6px;">
+    content_copy
+</span>
+复制 SSH 连接
+
+</button>
+
+
+<button id="bt-panel-btn"
+class="quick-action-btn">
+
+<span class="material-symbols-outlined"
+      style="font-size:17px; vertical-align:middle; margin-right:6px;">
+    dashboard
+</span>
+宝塔面板
+
+</button>
+
+
+<button id="disk-info-btn"
+class="quick-action-btn">
+
+<span class="material-symbols-outlined"
+      style="font-size:17px; vertical-align:middle; margin-right:6px;">
+    hard_drive
+</span>
+查看磁盘
+
+</button>
+
+
+<button id="memory-info-btn"
+class="quick-action-btn">
+
+<span class="material-symbols-outlined"
+      style="font-size:17px; vertical-align:middle; margin-right:6px;">
+    memory
+</span>
+查看内存
+
+</button>
+
+
+<button id="system-info-btn"
+class="quick-action-btn">
+
+<span class="material-symbols-outlined"
+      style="font-size:17px; vertical-align:middle; margin-right:6px;">
+    info
+</span>
+系统信息
+
+</button>
+
+
+  </div>
+      
+  </div>
+
+
+
+ </aside>
+
+
+        <!-- Terminal Container -->
+
+          <main 
+           id="terminal-container-wrapper"
+           class="flex-1 w-full bg-white border border-orange-100 rounded-xl overflow-hidden"
+            >
+
+
+         <div id="terminal-container"
+           class="h-full w-full flex flex-col">
+
+      
+          <!-- Status Bar -->
+          <div class="flex justify-between items-center h-9 px-3 border-b border-orange-100 bg-white text-gray-500 text-[11px]">
+            <div class="flex items-center gap-4 sm:gap-6 flex-nowrap">
+              <span id="term-status" class="flex items-center gap-1.5 font-semibold text-gray-600 whitespace-nowrap"><div class="w-2 h-2 bg-primary-container"></div> Connected</span>
+              <span id="term-host" class="truncate max-w-[220px] text-gray-600 whitespace-nowrap">Host: -</span>
+              <span id="term-user" class="truncate max-w-[120px] text-gray-600 whitespace-nowrap">User: -</span>
+              <span id="term-port" class="text-gray-600 whitespace-nowrap">Port: -</span>
+            </div>
+            <div>
+              <span id="term-info" class="text-gray-500 whitespace-nowrap"></span>
+            </div>
+          </div>
+          <!-- Terminal Area (TabManager 在此动态创建每个标签的容器) -->
+          <!-- Terminal Area -->
+<div class="flex-1 overflow-hidden relative flex flex-col">
+
+
+    <!-- xterm区域 -->
+    <div 
+        id="terminal-area"
+        class="flex-1 overflow-hidden relative">
+    </div>
+
+
+
+    <!-- Mobile Command Panel -->
+
+    <div
+        id="mobile-command-panel"
+        class="
+        shrink-0
+        border-t
+        border-orange-100
+        bg-white
+        p-3
+        flex
+        gap-2
+        items-center
+        ">
+
+
+        <input
+            id="mobile-command-input"
+            type="text"
+            placeholder="输入命令，回车发送..."
+            class="
+            flex-1
+            h-10
+            px-3
+            rounded-lg
+            border
+            border-gray-200
+            outline-none
+            text-sm
+            "
+        >
+
+
+        <button
+            id="mobile-command-send"
+            class="
+            h-10
+            px-5
+            rounded-lg
+            bg-orange-500
+            text-white
+            text-sm
+            font-bold
+            ">
+
+            发送
+
+        </button>
+
+
+
+        <button
+            id="extract-panel-btn"
+            class="
+            h-10
+            px-4
+            rounded-lg
+            border
+            border-orange-200
+            text-orange-600
+            text-sm
+            ">
+
+            提取
+
+        </button>
+
+
+    </div>
+
+
+</div>
+        </div>
+
+       </div>
+
+     </main>
+
+      <!-- Footer -->
+      <footer class="px-6 py-2 flex justify-between items-center z-50 bg-[#fffaf5] border-t border-orange-100 text-xs h-12 shrink-0">
+  <div class="text-secondary-container opacity-60">
+    © <span id="copyright-year"></span> 唐云 CloudSSH · 唯一官网·www.tyunidc.com 唯一客服TG· @tyunidc_kf
+  </div>
+</footer>
+    </div>
+  </div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

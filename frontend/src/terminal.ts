@@ -1,0 +1,2052 @@
+import { Terminal } from '@xterm/xterm';
+import { FitAddon } from '@xterm/addon-fit';
+import { WebLinksAddon } from '@xterm/addon-web-links';
+import { WebglAddon } from '@xterm/addon-webgl';
+import { SearchAddon } from '@xterm/addon-search';
+import { TrzszFilter } from 'trzsz';
+import '@xterm/xterm/css/xterm.css';
+
+const TRZSZ_MAX_DATA_CHUNK_SIZE = 2 * 1024 * 1024;
+
+export interface SSHConnectionConfig {
+  host: string;
+  port: number;
+  username: string;
+  password?: string;
+  authMethod?: 'password' | 'publickey';
+  privateKey?: string;
+  expectedFingerprint?: string;
+  /** 匿名路径手动覆盖的区域偏好（保存服务器路径不使用此字段） */
+  locationHint?: string;
+}
+
+interface ConnectOptions {
+  resetDisplay?: boolean;
+}
+
+
+export const THEMES = {
+
+  cloudssh: {
+   background: '#fffaf5',
+   foreground: '#475569',
+   cursor: '#ff8800',
+   cursorAccent: '#fffaf5',
+   selectionBackground: '#fed7aa',
+  },
+
+  cyberpunk: {
+    background: '#0a0a0a',
+    foreground: '#4af626',
+    cursor: '#14d1ff',
+    cursorAccent: '#0a0a0a',
+    selectionBackground: '#273747',
+  },
+
+  glacier: {
+    background: '#0a192f',
+    foreground: '#64ffda',
+    cursor: '#ef6fff',
+    cursorAccent: '#0a192f',
+    selectionBackground: '#112240',
+  },
+
+  gruvbox: {
+    background: '#282828',
+    foreground: '#ebdbb2',
+    cursor: '#d3869b',
+    cursorAccent: '#282828',
+    selectionBackground: '#504945',
+  },
+  
+};
+
+export const UI_THEMES: Record<keyof typeof THEMES, Record<string, string>> = {
+  cyberpunk: {
+    '--bg': '#0a0a0a',
+    '--bg-surface': '#121212',
+    '--bg-elevated': '#131313',
+    '--bg-terminal': '#0e0e0e',
+    '--text': '#4af626',
+    '--text-muted': '#bbccb0',
+    '--text-dim': '#3c4b36',
+    '--accent': '#4af626',
+    '--accent-secondary': '#14d1ff',
+    '--accent-secondary-light': '#b7eaff',
+    '--border': '#1f1f1f',
+    '--border-strong': '#3c4b36',
+    '--error': '#ffb4ab',
+    '--error-bg': '#93000a',
+    '--on-accent': '#022100',
+    '--surface-dot': '#353534',
+    '--scrollbar-track': 'rgba(28, 27, 27, 0.5)',
+    '--scrollbar-thumb': 'rgba(60, 75, 54, 0.8)',
+    '--scrollbar-thumb-hover': 'rgba(134, 149, 125, 0.8)',
+    '--scanline-tint': 'rgba(74, 246, 38, 0.02)',
+    '--accent-glow': 'rgba(74, 246, 38, 0.08)',
+    '--modal-overlay': 'rgba(0, 0, 0, 0.8)',
+    '--on-surface': '#e5e2e1',
+    '--on-surface-variant': '#bbccb0',
+    '--agent-user-color': '#4af626',
+    '--agent-agent-color': '#14d1ff',
+  },
+  glacier: {
+    '--bg': '#0a192f',
+    '--bg-surface': '#0d2137',
+    '--bg-elevated': '#112240',
+    '--bg-terminal': '#061526',
+    '--text': '#64ffda',
+    '--text-muted': '#8892b0',
+    '--text-dim': '#495670',
+    '--accent': '#64ffda',
+    '--accent-secondary': '#e6f1ff',
+    '--accent-secondary-light': '#ccd6f6',
+    '--border': '#1d3557',
+    '--border-strong': '#495670',
+    '--error': '#ff6b6b',
+    '--error-bg': '#3d0000',
+    '--on-accent': '#0a192f',
+    '--surface-dot': '#1d3557',
+    '--scrollbar-track': 'rgba(10, 25, 47, 0.5)',
+    '--scrollbar-thumb': 'rgba(100, 255, 218, 0.2)',
+    '--scrollbar-thumb-hover': 'rgba(100, 255, 218, 0.4)',
+    '--scanline-tint': 'rgba(100, 255, 218, 0.02)',
+    '--accent-glow': 'rgba(100, 255, 218, 0.08)',
+    '--modal-overlay': 'rgba(0, 0, 0, 0.85)',
+    '--on-surface': '#e6f1ff',
+    '--on-surface-variant': '#8892b0',
+    '--agent-user-color': '#64ffda',
+    '--agent-agent-color': '#e6f1ff',
+  },
+  gruvbox: {
+    '--bg': '#282828',
+    '--bg-surface': '#303030',
+    '--bg-elevated': '#282828',
+    '--bg-terminal': '#1d2021',
+    '--text': '#ebdbb2',
+    '--text-muted': '#a89984',
+    '--text-dim': '#665c54',
+    '--accent': '#b8bb26',
+    '--accent-secondary': '#83a598',
+    '--accent-secondary-light': '#8ec07c',
+    '--border': '#3c3836',
+    '--border-strong': '#665c54',
+    '--error': '#fb4934',
+    '--error-bg': '#3d0000',
+    '--on-accent': '#282828',
+    '--surface-dot': '#3c3836',
+    '--scrollbar-track': 'rgba(40, 40, 40, 0.5)',
+    '--scrollbar-thumb': 'rgba(168, 153, 132, 0.3)',
+    '--scrollbar-thumb-hover': 'rgba(168, 153, 132, 0.5)',
+    '--scanline-tint': 'rgba(184, 187, 38, 0.02)',
+    '--accent-glow': 'rgba(184, 187, 38, 0.08)',
+    '--modal-overlay': 'rgba(0, 0, 0, 0.75)',
+    '--on-surface': '#ebdbb2',
+    '--on-surface-variant': '#a89984',
+    '--agent-user-color': '#b8bb26',
+    '--agent-agent-color': '#83a598',
+  },
+
+  cloudssh: {
+   '--bg': '#fffaf5',
+   '--bg-surface': '#ffffff',
+   '--bg-elevated': '#ffffff',
+    '--bg-terminal': '#fffaf5',
+   '--text': '#1f2937',
+   '--text-muted': '#6b7280',
+   '--text-dim': '#9ca3af',
+   '--accent': '#f97316',
+    '--accent-secondary': '#fb923c',
+   '--accent-secondary-light': '#fed7aa',
+  '--border': '#fed7aa',
+   '--border-strong': '#fdba74',
+   '--error': '#ef4444',
+   '--error-bg': '#fee2e2',
+   '--on-accent': '#ffffff',
+   '--surface-dot': '#fed7aa',
+   '--scrollbar-track': '#fff7ed',
+   '--scrollbar-thumb': '#fdba74',
+   '--scrollbar-thumb-hover': '#fb923c',
+   '--scanline-tint': 'rgba(249,115,22,0.02)',
+   '--accent-glow': 'rgba(249,115,22,0.08)',
+   '--modal-overlay': 'rgba(0,0,0,0.4)',
+   '--on-surface': '#1f2937',
+   '--on-surface-variant': '#6b7280',
+   '--agent-user-color': '#f97316',
+   '--agent-agent-color': '#fb923c',
+  },
+
+};
+
+export class SSHTerminal {
+  private terminal: Terminal;
+  private fitAddon: FitAddon;
+  private webglAddon!: WebglAddon;
+  private searchAddon: SearchAddon;
+  private ws: WebSocket | null = null;
+  private container: HTMLElement;
+  private mobileCommandInput: HTMLInputElement | null = null;
+  private mobileCommandSendBtn: HTMLElement | null = null;
+  private disposables: { dispose(): void }[] = [];
+  private terminalDisposables: { dispose(): void }[] = [];
+  private terminalOutputBuffer = '';
+  private extractingBT = false;
+  private heartbeatInterval: ReturnType<typeof setInterval> | null = null;
+  private trzszFilter: TrzszFilter | null = null;
+  private mounted: boolean = false;
+  private reconnectAttempts: number = 0;
+  private maxReconnectAttempts: number = 5;
+  private reconnectTimeout: ReturnType<typeof setTimeout> | null = null;
+  private lastConfig: SSHConnectionConfig | null = null;
+  private hasConnectedSuccessfully: boolean = false;
+  private updateConnectionInfo(): void {
+
+  if (!this.lastConfig) return;
+
+  const config = this.lastConfig;
+
+  const hostValue =
+    config.host ||
+    (config as any).hostname ||
+    (config as any).serverHost ||
+    '--';
+
+  const userValue =
+    config.username ||
+    (config as any).user ||
+    'root';
+
+  const portValue = String(
+    config.port ||
+    (config as any).sshPort ||
+    (config as any).serverPort ||
+    22
+  );
+
+  const authValue =
+    config.authMethod === 'publickey'
+      ? 'SSH Key'
+      : 'Password';
+
+
+  // ==========================
+  // 左侧 Connection 信息
+  // ==========================
+
+  const host = document.getElementById('connection-host');
+  const user = document.getElementById('server-user');
+  const port = document.getElementById('connection-port');
+  const auth = document.getElementById('server-auth');
+
+  if (host) {
+    host.innerText = hostValue;
+  }
+
+  if (user) {
+    user.innerText = userValue;
+  }
+
+  if (port) {
+    port.innerText = portValue;
+  }
+
+  if (auth) {
+    auth.innerText = authValue;
+  }
+
+
+  // ==========================
+  // 顶部 Terminal 状态栏
+  // ==========================
+
+  const topHost = document.getElementById('term-host');
+  const topUser = document.getElementById('term-user');
+  const topPort = document.getElementById('term-port');
+
+  if (topHost) {
+    topHost.innerText = hostValue;
+  }
+
+  if (topUser) {
+    topUser.innerText = userValue;
+  }
+
+  if (topPort) {
+    topPort.innerText = portValue;
+  }
+
+}
+  private canReconnect: boolean = false;
+  private manualDisconnect: boolean = false;
+  private intentionalClose: boolean = false;
+  private restoreCursorBlinkAfterReturnPrompt: boolean = false;
+  private onSessionClosed?: (event: CloseEvent) => void;
+  private onSessionReady?: () => void;
+  private onAgentFrameHandler?: (msg: any) => void;
+  private sftpAttachUrl: string | null = null;
+  private searchBox: HTMLElement | null = null;
+  private searchInput: HTMLInputElement | null = null;
+  private searchVisible: boolean = false;
+  private contextMenu: HTMLElement | null = null;
+  private cfLatency: number | null = null;
+  private cfColo: string | null = null;
+  private lastPingTime: number | null = null;
+  private wsLatency: number | null = null;
+  private onLatencyUpdated?: (cfLatency: number | null, cfColo: string | null, wsLatency: number | null) => void;
+  private resizeListener: () => void;
+
+ constructor(containerId: string) {
+
+  this.container = document.getElementById(containerId)!;
+
+  this.resizeListener = () => this.fit();
+
+
+  this.terminal = new Terminal({
+
+    cursorBlink: true,
+
+    cursorStyle: 'block',
+
+     fontSize: window.innerWidth <= 768 ? 8 : 13,
+
+    fontFamily: '"JetBrains Mono", "Fira Code", "Cascadia Code", monospace',
+
+    theme: THEMES.cloudssh,
+
+    allowProposedApi: true,
+
+    scrollback: 10000,
+
+    convertEol: true,
+
+  });
+
+
+  this.initQuickActionButtons();
+
+
+    this.fitAddon = new FitAddon();
+    this.terminal.loadAddon(this.fitAddon);
+    this.terminal.loadAddon(new WebLinksAddon());
+    this.searchAddon = new SearchAddon();
+    this.terminal.loadAddon(this.searchAddon);
+    this.registerCursorRestoreHandlers();
+
+    // Ctrl+Shift+F to toggle search bar
+    this.terminal.attachCustomKeyEventHandler((e: KeyboardEvent) => {
+      if (e.ctrlKey && e.shiftKey && (e.key === 'F' || e.key === 'f')) {
+        e.preventDefault();
+        this.toggleSearch();
+        return false;
+      }
+      if (e.key === 'Escape' && this.searchVisible) {
+        this.hideSearch();
+        return false;
+      }
+      return true;
+    });
+
+    window.addEventListener(
+    'resize',
+    this.resizeListener
+);
+
+    
+  
+   
+    // Drag-and-drop file upload support (trzsz)
+    this.container.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    });
+    this.container.addEventListener('drop', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (this.trzszFilter && e.dataTransfer?.items) {
+        this.trzszFilter.uploadFiles(e.dataTransfer.items)
+          .then(() => console.log('[trzsz] Drag-drop upload success'))
+          .catch((err: any) => console.error('[trzsz] Drag-drop upload error:', err));
+      }
+    });
+  }
+
+  setTheme(themeName: keyof typeof THEMES): void {
+    this.terminal.options.theme = THEMES[themeName];
+    const uiVars = UI_THEMES[themeName];
+    if (uiVars) {
+      const root = document.documentElement;
+      Object.entries(uiVars).forEach(([prop, val]) => {
+        root.style.setProperty(prop, val);
+      });
+    }
+    localStorage.setItem('cloudssh_theme', themeName);
+  }
+
+  applyImportedTheme(data: { terminal?: Record<string, string>; ui?: Record<string, string> }): void {
+    if (data.terminal) {
+      this.terminal.options.theme = data.terminal as any;
+    }
+    if (data.ui) {
+      const root = document.documentElement;
+      Object.entries(data.ui).forEach(([prop, val]) => {
+        root.style.setProperty(prop, val);
+      });
+    }
+  }
+
+  setSessionClosedHandler(handler: (event: CloseEvent) => void): void {
+    this.onSessionClosed = handler;
+  }
+
+  setSessionReadyHandler(handler: () => void): void {
+    this.onSessionReady = handler;
+  }
+
+  setAgentFrameHandler(handler: (msg: any) => void): void {
+    this.onAgentFrameHandler = handler;
+  }
+
+  sendWebSocketMessage(data: string): void {
+    if (this.ws?.readyState === WebSocket.OPEN) {
+      this.ws.send(data);
+    }
+  }
+
+  setLatencyUpdatedHandler(handler: (cfLatency: number | null, cfColo: string | null, wsLatency: number | null) => void): void {
+    this.onLatencyUpdated = handler;
+    if (this.cfLatency !== null || this.cfColo !== null || this.wsLatency !== null) {
+      handler(this.cfLatency, this.cfColo, this.wsLatency);
+    }
+  }
+
+  private updateLatency(latency:number|null){
+
+const el=document.getElementById(
+'server-latency'
+);
+
+
+if(el){
+
+el.innerText =
+latency !== null
+?
+latency+' ms'
+:
+'--';
+
+}
+
+}
+  getSFTPWebSocketUrl(): string | null {
+    return this.sftpAttachUrl;
+  }
+
+  mount(): void {
+    if (this.mounted) {
+      this.fit();
+      return;
+    }
+
+    this.terminal.open(this.container);
+    const terminalElement =
+  this.container.querySelector('.xterm') as HTMLElement | null;
+
+
+if (terminalElement) {
+
+  terminalElement.addEventListener(
+    'contextmenu',
+    (e: MouseEvent)=>{
+
+      e.preventDefault();
+      e.stopPropagation();
+
+
+      this.showContextMenu(
+        e.clientX,
+        e.clientY
+      );
+
+    }
+  );
+
+}
+    this.initMobileCommandPanel();
+    this.mounted = true;
+    
+    // Load WebGL addon after terminal is opened
+    try {
+      this.webglAddon = new WebglAddon();
+      this.webglAddon.onContextLoss(e => {
+        console.warn('WebGL context lost', e);
+        this.webglAddon.dispose();
+      });
+      this.terminal.loadAddon(this.webglAddon);
+    } catch (e) {
+      console.warn('WebGL addon failed to load, falling back to canvas/dom', e);
+    }
+
+    this.fit();
+
+
+setTimeout(()=>{
+
+ this.fit();
+
+ this.sendResize();
+
+
+},300);
+
+}  
+
+private showContextMenu(x: number, y: number): void {
+
+  this.hideContextMenu();
+
+
+  const menu = document.createElement('div');
+
+  menu.className = 'cloudssh-context-menu';
+
+
+  const selection = this.terminal.getSelection();
+
+
+  menu.innerHTML = `
+
+    ${
+      selection
+      ?
+      `<div data-action="copy">
+        📋 复制
+      </div>`
+      :
+      ''
+    }
+
+
+    <div data-action="paste">
+      📥 粘贴
+    </div>
+
+  `;
+
+
+  menu.style.position = 'fixed';
+  menu.style.left = `${x}px`;
+  menu.style.top = `${y}px`;
+  menu.style.zIndex = '9999';
+
+
+  document.body.appendChild(menu);
+
+
+  menu.querySelector('[data-action="copy"]')
+    ?.addEventListener('click', async()=>{
+
+      if(selection){
+
+        await navigator.clipboard.writeText(selection);
+
+        this.terminal.clearSelection();
+
+      }
+
+      this.hideContextMenu();
+
+    });
+
+
+
+  menu.querySelector('[data-action="paste"]')
+    ?.addEventListener('click', async()=>{
+
+      const text =
+        await navigator.clipboard.readText();
+
+
+      if(
+        text &&
+        this.ws?.readyState === WebSocket.OPEN
+      ){
+
+        this.ws.send(text);
+
+      }
+
+
+      this.hideContextMenu();
+
+    });
+
+
+
+  this.contextMenu = menu;
+
+}
+
+
+
+private hideContextMenu(): void {
+
+  if(this.contextMenu){
+
+    this.contextMenu.remove();
+
+    this.contextMenu = null;
+
+  }
+
+}
+
+
+// 手机命令输入
+
+private initMobileCommandPanel(): void {
+
+  const input =
+    document.getElementById('mobile-command-input') as HTMLInputElement | null;
+
+  const button =
+    document.getElementById('mobile-command-send');
+
+  const extract =
+    document.getElementById('extract-panel-btn');
+
+
+  if (!input || !button) {
+    return;
+  }
+
+
+
+  
+  const sendCommand = () => {
+
+    const command = input.value.trim();
+
+    if (!command) {
+      return;
+    }
+
+
+    this.sendWebSocketMessage(command + '\n');
+
+    input.value = '';
+
+  };
+
+
+  button.onclick = sendCommand;
+
+
+  input.onkeydown = (event) => {
+
+    if(event.key === 'Enter') {
+
+      event.preventDefault();
+
+      sendCommand();
+
+    }
+
+  };
+
+
+    if(extract){
+
+    extract.onclick = () => {
+
+    this.extractBTInfo();
+
+    };
+
+  }
+
+}
+
+
+
+// ==================== 快捷操作按钮 ====================
+
+private initQuickActionButtons(): void {
+
+// 复制 SSH 连接
+
+const copySSH =document.getElementById('copy-ssh-btn');
+
+if(copySSH){
+
+copySSH.onclick = async()=>{
+
+
+  if(!this.lastConfig)
+    return;
+
+
+  const ssh =
+  `ssh ${this.lastConfig.username}@${this.lastConfig.host} -p ${this.lastConfig.port}`;
+
+
+  await navigator.clipboard.writeText(ssh);
+
+
+  copySSH.innerHTML =
+  "✅ 已复制";
+
+
+  setTimeout(()=>{
+
+    copySSH.innerHTML =
+    "📋 复制 SSH 连接";
+
+  },1500);
+
+
+};
+
+}
+
+
+
+// 查看磁盘
+
+const disk =document.getElementById('disk-info-btn');
+
+if(disk){
+
+disk.onclick=()=>{
+
+  this.sendWebSocketMessage(
+    "df -h\n"
+  );
+
+};
+
+}
+
+
+
+// 查看内存
+
+const memory =document.getElementById('memory-info-btn');
+
+if(memory){
+
+memory.onclick=()=>{
+
+
+  this.sendWebSocketMessage(
+    "free -m\n"
+  );
+
+
+};
+
+}
+
+
+
+// 系统信息
+
+const system =document.getElementById('system-info-btn');
+
+if(system){
+
+system.onclick=()=>{
+
+
+  this.sendWebSocketMessage(
+    "uname -a\n"
+  );
+
+
+};
+
+}
+
+
+
+// 宝塔面板
+
+const bt =document.getElementById('bt-panel-btn');
+
+if(bt){
+
+bt.onclick=()=>{
+
+
+  this.sendWebSocketMessage(
+    "bt\n"
+  );
+
+
+};
+
+}
+
+
+} 
+// ==================== 宝塔提取 ====================
+
+private extractBTInfo(): void {
+
+
+  if (this.extractingBT) {
+    return;
+  }
+
+
+  this.extractingBT = true;
+
+
+
+  const buffer = this.terminal.buffer.active;
+
+
+  const lines:string[] = [];
+
+
+  for(let i = 0; i < buffer.length; i++){
+
+    const line = buffer.getLine(i);
+
+    if(line){
+
+      lines.push(
+        line.translateToString(true)
+      );
+
+    }
+
+  }
+
+
+
+  const fullText = lines.join('\n');
+
+
+
+  const index = fullText.lastIndexOf(
+    'BT-Panel default info!'
+  );
+
+
+
+  const text = index >= 0
+    ? fullText.substring(index)
+    : fullText;
+
+
+
+  console.log(
+    '宝塔原始输出:',
+    text
+  );
+
+
+
+  const btInfo = this.parseBTInfo(text);
+
+
+
+  this.showBTModal(btInfo);
+
+
+
+  this.extractingBT = false;
+
+
+}
+
+
+// 宝塔解析
+
+private parseBTInfo(text:string) {
+
+
+  const externalUrl =
+    text.match(/外网ipv4面板地址[:：\s]+(https?:\/\/\S+)/)?.[1] || '';
+
+
+  const internalUrl =
+    text.match(/内网面板地址[:：\s]+(https?:\/\/\S+)/)?.[1] || '';
+
+
+  const username =
+    text.match(/username[:：\s]+(\S+)/i)?.[1] || '';
+
+
+  const password =
+    text.match(/password[:：\s]+(\S+)/i)?.[1] || '';
+
+
+
+  const btInfo = {
+
+    externalUrl,
+
+    internalUrl,
+
+    username,
+
+    password
+
+  };
+
+
+  console.log(
+    '宝塔解析结果:',
+    btInfo
+  );
+
+
+  return btInfo;
+
+}
+
+private showBTModal(info:any):void {
+
+  const modal = document.createElement('div');
+
+  modal.style.position = 'fixed';
+  modal.style.top = '50%';
+  modal.style.left = '50%';
+  modal.style.transform = 'translate(-50%,-50%)';
+  modal.style.zIndex = '99999';
+
+  modal.style.width = '380px';
+  modal.style.maxWidth = '90vw';
+
+  modal.style.background = '#fffaf5';
+  modal.style.border = '1px solid #fed7aa';
+  modal.style.borderRadius = '16px';
+  modal.style.padding = '20px';
+  modal.style.boxShadow = '0 20px 40px rgba(0,0,0,.15)';
+  modal.style.color = '#1f2937';
+
+
+  modal.innerHTML = `
+
+<div style="
+font-size:18px;
+font-weight:700;
+margin-bottom:18px;
+color:#f97316;
+">
+🟧 宝塔面板信息
+</div>
+
+
+<div class="bt-item">
+
+<div style="
+font-size:13px;
+color:#6b7280;
+margin-bottom:6px;
+">
+🌐 外网地址
+</div>
+
+
+<div class="bt-row" style="
+display:flex;
+align-items:center;
+gap:8px;
+">
+
+<div style="
+flex:1;
+word-break:break-all;
+font-size:13px;
+background:#fff;
+border:1px solid #fed7aa;
+border-radius:8px;
+padding:8px;
+">
+${info.externalUrl || '-'}
+</div>
+
+
+<button data-copy="${info.externalUrl}"
+class="bt-copy-btn"
+style="
+border:none;
+background:#fff;
+cursor:pointer;
+font-size:18px;
+">
+📋
+</button>
+
+</div>
+
+</div>
+
+
+
+<div class="bt-item"
+style="margin-top:14px;"
+>
+
+<div style="
+font-size:13px;
+color:#6b7280;
+margin-bottom:6px;
+">
+🏠 内网地址
+</div>
+
+
+<div style="
+display:flex;
+align-items:center;
+gap:8px;
+">
+
+
+<div style="
+flex:1;
+word-break:break-all;
+font-size:13px;
+background:#fff;
+border:1px solid #fed7aa;
+border-radius:8px;
+padding:8px;
+">
+${info.internalUrl || '-'}
+</div>
+
+
+<button data-copy="${info.internalUrl}"
+class="bt-copy-btn"
+style="
+border:none;
+background:#fff;
+cursor:pointer;
+font-size:18px;
+">
+📋
+</button>
+
+
+</div>
+
+</div>
+
+
+
+
+<div class="bt-item"
+style="margin-top:14px;"
+>
+
+<div style="
+font-size:13px;
+color:#6b7280;
+margin-bottom:6px;
+">
+👤 用户名
+</div>
+
+
+<div style="
+display:flex;
+align-items:center;
+gap:8px;
+">
+
+
+<div style="
+flex:1;
+font-size:13px;
+background:#fff;
+border:1px solid #fed7aa;
+border-radius:8px;
+padding:8px;
+">
+${info.username || '-'}
+</div>
+
+
+<button data-copy="${info.username}"
+class="bt-copy-btn"
+style="
+border:none;
+background:#fff;
+cursor:pointer;
+font-size:18px;
+">
+📋
+</button>
+
+
+</div>
+
+</div>
+
+
+
+
+<div class="bt-item"
+style="margin-top:14px;"
+>
+
+<div style="
+font-size:13px;
+color:#6b7280;
+margin-bottom:6px;
+">
+🔑 密码
+</div>
+
+
+<div style="
+display:flex;
+align-items:center;
+gap:8px;
+">
+
+
+<div style="
+flex:1;
+font-size:13px;
+background:#fff;
+border:1px solid #fed7aa;
+border-radius:8px;
+padding:8px;
+">
+${info.password || '-'}
+</div>
+
+
+<button data-copy="${info.password}"
+class="bt-copy-btn"
+style="
+border:none;
+background:#fff;
+cursor:pointer;
+font-size:18px;
+">
+📋
+</button>
+
+
+</div>
+
+</div>
+
+
+
+
+<div style="
+height:1px;
+background:#fed7aa;
+margin:20px 0;
+"></div>
+
+
+
+<button id="bt-copy-all"
+style="
+width:100%;
+padding:10px;
+border:none;
+border-radius:10px;
+background:#f97316;
+color:white;
+font-size:14px;
+cursor:pointer;
+">
+📋 复制全部
+</button>
+
+
+<button id="bt-close"
+style="
+margin-top:10px;
+width:100%;
+padding:10px;
+border:1px solid #fed7aa;
+border-radius:10px;
+background:white;
+font-size:14px;
+cursor:pointer;
+">
+✖ 关闭窗口
+</button>
+
+
+`;
+
+
+  document.body.appendChild(modal);
+
+
+
+  // 单项复制
+  modal.querySelectorAll('.bt-copy-btn')
+  .forEach(btn=>{
+
+    btn.addEventListener('click',async()=>{
+
+      const value =
+      (btn as HTMLElement).dataset.copy || '';
+
+
+      await navigator.clipboard.writeText(value);
+
+
+      const old =
+      btn.innerHTML;
+
+
+      btn.innerHTML =
+      '✅ 已复制';
+
+
+      setTimeout(()=>{
+
+        btn.innerHTML = old;
+
+      },1500);
+
+
+    });
+
+  });
+
+
+
+
+
+  // 复制全部
+
+  modal.querySelector('#bt-copy-all')
+?.addEventListener('click', async (e)=>{
+
+
+  const btn =
+  e.currentTarget as HTMLElement;
+
+
+  const text =
+`
+宝塔地址:
+${info.externalUrl}
+
+内网地址:
+${info.internalUrl}
+
+用户名:
+${info.username}
+
+密码:
+${info.password}
+`;
+
+
+
+  try {
+
+
+    await navigator.clipboard.writeText(text);
+
+
+
+    btn.innerHTML =
+    '✅ 已全部复制';
+
+
+
+  } catch(err){
+
+
+    console.error(
+      '复制失败:',
+      err
+    );
+
+
+    // 备用复制方案
+    const textarea =
+    document.createElement('textarea');
+
+
+    textarea.value = text;
+
+
+    document.body.appendChild(textarea);
+
+
+    textarea.select();
+
+
+    document.execCommand('copy');
+
+
+    textarea.remove();
+
+
+
+    btn.innerHTML =
+    '✅ 已全部复制';
+
+
+  }
+
+
+
+  setTimeout(()=>{
+
+    btn.innerHTML =
+    '📋 复制全部';
+
+
+  },1500);
+
+
+
+});
+
+
+
+
+
+  //关闭
+
+  modal.querySelector('#bt-close')
+  ?.addEventListener(
+    'click',
+    ()=>{
+      modal.remove();
+    }
+  );
+
+
+}
+
+
+
+// ==================== 搜索 ====================
+
+
+
+
+
+
+  private createSearchBox(): void {
+    if (this.searchBox) return;
+
+    const box = document.createElement('div');
+    box.className = 'cloudssh-search-box';
+    box.style.display = 'none';
+    box.innerHTML = `
+      <input type="text" class="cloudssh-search-input" placeholder="Search..." />
+      <button class="cloudssh-search-btn cloudssh-search-prev" title="Previous (Shift+Enter)">
+        <span class="material-symbols-outlined" style="font-size:16px;">arrow_upward</span>
+      </button>
+      <button class="cloudssh-search-btn cloudssh-search-next" title="Next (Enter)">
+        <span class="material-symbols-outlined" style="font-size:16px;">arrow_downward</span>
+      </button>
+      <button class="cloudssh-search-btn cloudssh-search-close" title="Close (Esc)">
+        <span class="material-symbols-outlined" style="font-size:16px;">close</span>
+      </button>
+    `;
+
+    this.container.style.position = 'relative';
+    this.container.appendChild(box);
+    this.searchBox = box;
+    this.searchInput = box.querySelector('.cloudssh-search-input') as HTMLInputElement;
+
+    // Search on input
+    this.searchInput.addEventListener('input', () => {
+      const term = this.searchInput!.value;
+      if (term) {
+        this.searchAddon.findNext(term, { incremental: true });
+      }
+    });
+
+    // Enter = next, Shift+Enter = previous
+    this.searchInput.addEventListener('keydown', (e: KeyboardEvent) => {
+      const term = this.searchInput!.value;
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        if (e.shiftKey) {
+          this.searchAddon.findPrevious(term);
+        } else {
+          this.searchAddon.findNext(term);
+        }
+      }
+    });
+
+    // Button handlers
+    box.querySelector('.cloudssh-search-prev')!.addEventListener('click', () => {
+      const term = this.searchInput!.value;
+      if (term) this.searchAddon.findPrevious(term);
+    });
+    box.querySelector('.cloudssh-search-next')!.addEventListener('click', () => {
+      const term = this.searchInput!.value;
+      if (term) this.searchAddon.findNext(term);
+    });
+    box.querySelector('.cloudssh-search-close')!.addEventListener('click', () => {
+      this.hideSearch();
+    });
+  }
+
+  toggleSearch(): void {
+    if (this.searchVisible) {
+      this.hideSearch();
+    } else {
+      this.showSearch();
+    }
+  }
+
+  showSearch(): void {
+    this.createSearchBox();
+    if (!this.searchBox) return;
+    this.searchBox.style.display = 'flex';
+    this.searchVisible = true;
+    this.searchInput?.focus();
+    this.searchInput?.select();
+  }
+
+  hideSearch(): void {
+    if (!this.searchBox) return;
+    this.searchBox.style.display = 'none';
+    this.searchVisible = false;
+    this.terminal.focus();
+  }
+
+  // ==================== known_hosts (TOFU) ====================
+
+  private handleHostKey(fingerprint: string): void {
+    if (!this.lastConfig) return;
+    const key = `${this.lastConfig.host}:${this.lastConfig.port}`;
+
+    // 存储到 localStorage（匿名用户）
+    try {
+      const raw = localStorage.getItem('cloudssh_known_hosts');
+      const map = raw ? JSON.parse(raw) : {};
+      map[key] = fingerprint;
+      localStorage.setItem('cloudssh_known_hosts', JSON.stringify(map));
+    } catch { /* ignore */ }
+
+    // 尝试存储到云端（登录用户）
+    fetch('/api/known-hosts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        host: this.lastConfig.host,
+        port: this.lastConfig.port,
+        fingerprint,
+      }),
+    }).catch(() => { /* 未登录或网络错误，忽略 */ });
+  }
+
+  async connect(config: SSHConnectionConfig, options: ConnectOptions = {}): Promise<void> {
+
+    this.resetActiveConnection();
+
+    this.intentionalClose = false;
+    this.manualDisconnect = false;
+
+    // 清空宝塔解析缓存
+    this.terminalOutputBuffer = '';
+
+    this.lastConfig = config;
+
+     console.log(
+    "CloudSSH Config:",
+    config
+   );
+
+    this.updateConnectionInfo();
+
+/*
+ * 首次连接禁止自动重连。
+ * 只有之前已经成功认证过的会话，
+ * 因网络波动进入重连时才保留重连资格。
+ */
+if (options.resetDisplay !== false) {
+
+    this.hasConnectedSuccessfully = false;
+    this.canReconnect = false;
+
+}
+
+if (options.resetDisplay !== false) {
+    this.showConnectingBanner();
+}
+
+    const termStatus = document.getElementById('term-status');
+    if (termStatus) termStatus.innerHTML = '<div class="w-2 h-2 bg-primary-container animate-pulse"></div> Connected';
+
+    const wsUrl = new URL(window.location.href);
+
+      wsUrl.protocol = wsUrl.protocol === 'https:' ? 'wss:' : 'ws:';
+
+      wsUrl.pathname = '/api/ssh';
+
+     // 匿名路径：用户在前端选定 region 后作为 URL query 传给 Worker
+     // Worker 在 get() 前读取并传入 locationHint（仅手动覆盖路径）
+   if (config.locationHint) {
+       wsUrl.searchParams.set('region', config.locationHint);
+  }
+
+    return new Promise((resolve, reject) => {
+      this.ws = new WebSocket(wsUrl.toString());
+      this.ws.binaryType = 'arraybuffer';
+
+      this.ws.onopen = () => {
+
+
+  // 手机端先计算终端尺寸
+  this.fit();
+
+
+  this.terminal.writeln(
+    '\x1b[32m[+] WebSocket connected, sending credentials...\x1b[0m'
+  );
+
+
+  this.ws?.send(JSON.stringify({
+          host: config.host,
+          port: config.port,
+          username: config.username,
+          password: config.password,
+          authMethod: config.authMethod,
+          privateKey: config.privateKey,
+          expectedFingerprint: config.expectedFingerprint,
+          ...this.getTerminalSize(),
+        }));
+        
+        this.startHeartbeat();
+        resolve();
+      };
+
+      this.ws.onerror = () => {
+        reject(new Error('WebSocket connection failed'));
+      };
+
+      this.setupWebSocketHandlers(reject);
+    });
+  }
+
+  connectWithWebSocket(
+  ws: WebSocket,
+  hostInfo?: {
+    host: string;
+    port: number;
+    username?: string;
+    authMethod?: 'password' | 'publickey';
+  }
+): void {
+
+  this.resetActiveConnection();
+
+  this.lastConfig = hostInfo
+    ? {
+        host: hostInfo.host,
+        port: hostInfo.port,
+        username: hostInfo.username || 'root',
+        password: '',
+        authMethod: hostInfo.authMethod || 'password',
+      }
+    : null;
+
+  this.updateConnectionInfo();
+
+  this.canReconnect = false;
+  this.ws = ws;
+  ws.binaryType = 'arraybuffer';
+  this.showConnectingBanner();
+
+    const termStatus = document.getElementById('term-status');
+    if (termStatus) termStatus.innerHTML = '<div class="w-2 h-2 bg-primary-container animate-pulse"></div> Connected';
+
+    ws.onopen = () => {
+      this.terminal.writeln('\x1b[32m[+] WebSocket connected, authenticating...\x1b[0m');
+      this.sendResize();
+      this.startHeartbeat();
+    };
+
+    if (ws.readyState === WebSocket.OPEN) {
+      this.sendResize();
+    }
+
+    this.setupWebSocketHandlers();
+  }
+
+  private setupWebSocketHandlers(rejectFn?: (reason?: any) => void): void {
+    if (!this.ws) return;
+    const socket = this.ws;
+
+    // Trzsz file transfer support
+    this.trzszFilter = new TrzszFilter({
+      writeToTerminal: (data: string | ArrayBuffer | Uint8Array | Blob) => {
+        if (typeof data === 'string') {
+          this.terminal.write(data);
+        } else if (data instanceof Uint8Array) {
+          this.terminal.write(data);
+        } else if (data instanceof ArrayBuffer) {
+          this.terminal.write(new Uint8Array(data));
+        } else if (data instanceof Blob) {
+          data.arrayBuffer().then(buf => this.terminal.write(new Uint8Array(buf)));
+        }
+      },
+      sendToServer: (data: string | Uint8Array) => {
+        if (this.ws?.readyState === WebSocket.OPEN) {
+          this.ws.send(data);
+        }
+      },
+      terminalColumns: this.terminal.cols,
+      maxDataChunkSize: TRZSZ_MAX_DATA_CHUNK_SIZE,
+    });
+
+    this.ws.onmessage = (event) => {
+      if (typeof event.data === 'string') {       
+        try {
+          const msg = JSON.parse(event.data);
+          if (msg.type === 'sftp_attach') {
+            this.sftpAttachUrl = msg.url || null;
+            return;
+          }
+
+          if (msg.type === 'agent_frame') {
+            this.onAgentFrameHandler?.(msg);
+            return;
+          }
+
+          switch (msg.type) {
+            case 'status':
+              this.terminal.writeln(`\x1b[32m[*] ${msg.message}\x1b[0m`);
+              if (msg.event === 'auth_success' || msg.message === '认证成功') {
+                
+    this.hasConnectedSuccessfully = true;
+    this.canReconnect = true;            
+
+    this.reconnectAttempts = 0;
+
+
+    // 更新左侧 Connection 信息
+    this.updateConnectionInfo();
+
+
+    const statusText = document.getElementById('status-text');
+
+
+    if (statusText) {
+
+        statusText.innerHTML =
+        '<span class="w-2 h-2 bg-[var(--accent)] inline-block animate-pulse"></span> STATUS: ONLINE';
+
+    }
+
+}
+              if (msg.event === 'shell_ready' || msg.message === 'Shell 已就绪') {
+
+    this.onSessionReady?.();
+
+
+setTimeout(()=>{
+
+    this.fit();
+
+},300);
+
+
+    setTimeout(()=>{
+
+        this.fit();
+
+        this.terminal.refresh(
+            0,
+            this.terminal.rows
+        );
+
+        this.terminal.focus();
+
+    },200);
+
+}
+              break;
+            case 'error':
+
+    this.terminal.writeln(
+        `\x1b[31m[!] ${msg.message}\x1b[0m`
+    );
+
+    /*
+     * 如果 SSH 从来没有认证成功，
+     * 说明这是首次连接失败：
+     *
+     * - 密码错误
+     * - 用户名错误
+     * - 端口错误
+     * - 主机不可达
+     * - SSH 握手失败
+     *
+     * 这些情况禁止自动重连。
+     */
+    if (!this.hasConnectedSuccessfully) {
+
+        this.canReconnect = false;
+
+    }
+
+    break;
+            case 'debug':
+              this.terminal.writeln(`\x1b[90m[DEBUG] ${msg.message}\x1b[0m`);
+              break;
+            case 'host_key':
+              this.handleHostKey(msg.fingerprint);
+              break;
+            case 'pong':
+              if (this.lastPingTime !== null) {
+                this.wsLatency = Math.round(performance.now() - this.lastPingTime);
+                this.updateLatency(this.wsLatency);
+                this.lastPingTime = null;
+                this.onLatencyUpdated?.(this.cfLatency, this.cfColo, this.wsLatency);
+              }
+              break;
+            case 'rtt':
+              this.cfLatency = msg.latency;
+              this.cfColo = msg.colo;
+              this.onLatencyUpdated?.(this.cfLatency, this.cfColo, this.wsLatency);
+              break;
+          }
+
+           }
+
+        catch {
+
+
+   console.log("SSH RAW:", JSON.stringify(event.data));
+
+
+   this.trzszFilter!.processServerOutput(event.data);
+
+
+}
+
+
+      } else {
+        this.trzszFilter!.processServerOutput(event.data);
+      }
+    };
+
+    this.ws.onclose = (event) => {
+
+      if (socket !== this.ws) return;
+
+ 
+      if (this.intentionalClose) {
+
+       this.intentionalClose = false;
+       return;
+
+      }     
+      if (this.extractingBT) {
+
+       this.extractingBT = false;
+
+       return;
+
+      }
+
+      this.stopHeartbeat();
+      this.terminal.writeln(
+        `\x1b[33m[*] Connection closed (code=${event.code})\x1b[0m`
+      );
+      const termStatus = document.getElementById('term-status');
+      if (termStatus) termStatus.innerHTML = '<div class="w-2 h-2 bg-[var(--error)]"></div> Disconnected';
+      const statusText = document.getElementById('status-text');
+      if (statusText) statusText.innerHTML = '<span class="w-2 h-2 bg-surface-dot inline-block"></span> STATUS: OFFLINE';
+      
+      if (event.code === 1000) {
+        this.onSessionClosed?.(event);
+        return;
+      }
+
+      if (
+    !this.manualDisconnect &&
+    this.hasConnectedSuccessfully &&
+    this.canReconnect &&
+    this.lastConfig &&
+    this.reconnectAttempts < this.maxReconnectAttempts
+) {
+
+    this.scheduleReconnect();
+
+}
+    };
+
+    this.ws.onerror = () => {
+      this.terminal.writeln('\x1b[31m[!] Connection error\x1b[0m');
+      if (rejectFn) rejectFn(new Error('WebSocket connection failed'));
+    };
+
+    // User input goes through trzsz filter
+    this.disposables.push(
+      this.terminal.onData((data) => {
+        this.trzszFilter!.processTerminalInput(data);
+      })
+    );
+
+    // Binary input support
+    this.disposables.push(
+      this.terminal.onBinary((data) => {
+        this.trzszFilter!.processBinaryInput(data);
+      })
+    );
+
+    // Terminal resize: send to server + update trzsz column count
+    this.disposables.push(
+      this.terminal.onResize(({ cols, rows }) => {
+        this.sendResize({ cols, rows });
+        this.trzszFilter?.setTerminalColumns(cols);
+      })
+    );
+  }
+
+  fit(): void {
+    this.fitAddon.fit();
+  }
+
+  private startHeartbeat(): void {
+    this.stopHeartbeat();
+    const sendPing = () => {
+      if (this.ws?.readyState === WebSocket.OPEN) {
+        this.lastPingTime = performance.now();
+        this.ws.send(JSON.stringify({ type: 'ping' }));
+      }
+    };
+    sendPing();
+    this.heartbeatInterval = setInterval(sendPing, 30000);
+  }
+
+  private getTerminalSize(): { cols:number; rows:number } {
+
+ return {
+   cols:this.terminal.cols,
+   rows:this.terminal.rows
+ };
+
+}
+
+  private sendResize(size = this.getTerminalSize()): void {
+    if (this.ws?.readyState === WebSocket.OPEN) {
+      this.ws.send(JSON.stringify({
+        type: 'resize',
+        ...size,
+      }));
+    }
+  }
+
+  private registerCursorRestoreHandlers(): void {
+    this.terminalDisposables.push(
+      this.terminal.parser.registerCsiHandler({ prefix: '?', final: 'h' }, (params) => {
+        if (params[0] === 2004 && this.terminal.buffer.active.type === 'normal') {
+          this.restoreCursorBlinkAfterReturnPrompt = true;
+        }
+        return false;
+      })
+    );
+
+    this.terminalDisposables.push(
+      this.terminal.onWriteParsed(() => {
+        if (!this.restoreCursorBlinkAfterReturnPrompt) return;
+        this.restoreCursorBlinkAfterReturnPrompt = false;
+        this.terminal.options.cursorBlink = true;
+      })
+    );
+  }
+
+  private resetTerminalDisplay(): void {
+    this.terminal.reset();
+    this.terminal.options.cursorBlink = true;
+    this.terminal.write('\x1b[2J\x1b[3J\x1b[H');
+  }
+
+   private showConnectingBanner(): void {
+
+   this.resetTerminalDisplay();
+
+   this.terminal.write(
+    '\x1b[38;5;208mConnecting to 唐云·CloudSSH·www.tyunidc.com\x1b[0m\r\n\r\n'
+  );
+
+}
+
+  private stopHeartbeat(): void {
+    if (this.heartbeatInterval) {
+      clearInterval(this.heartbeatInterval);
+      this.heartbeatInterval = null;
+    }
+  }
+
+  private disposeConnectionDisposables(): void {
+    this.disposables.forEach(d => d.dispose());
+    this.disposables = [];
+  }
+
+  private clearReconnectTimeout(): void {
+    if (this.reconnectTimeout) {
+      clearTimeout(this.reconnectTimeout);
+      this.reconnectTimeout = null;
+    }
+  }
+
+  private resetActiveConnection(): void {
+    this.stopHeartbeat();
+    this.clearReconnectTimeout();
+    this.disposeConnectionDisposables();
+
+    const socket = this.ws;
+    this.intentionalClose = true;
+    this.ws = null;
+    this.sftpAttachUrl = null;
+    this.trzszFilter = null;
+
+    this.cfLatency = null;
+    this.cfColo = null;
+    this.lastPingTime = null;
+    this.wsLatency = null;
+
+    if (socket && socket.readyState !== WebSocket.CLOSED && socket.readyState !== WebSocket.CLOSING) {
+      socket.close(1000);
+    }
+  }
+
+  private scheduleReconnect(): void {
+    this.clearReconnectTimeout();
+    
+    this.reconnectAttempts++;
+    const delay = Math.min(1000 * Math.pow(2, this.reconnectAttempts), 30000);
+    
+    this.terminal.writeln(`\x1b[33m[*] Reconnecting in ${delay / 1000}s (attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})...\x1b[0m`);
+    
+    this.reconnectTimeout = setTimeout(async () => {
+      this.reconnectTimeout = null;
+      if (this.lastConfig) {
+        this.terminal.writeln('\x1b[32m[+] Reconnecting...\x1b[0m');
+        try {
+          await this.connect(this.lastConfig, { resetDisplay: false });
+        } catch (e) {
+          this.terminal.writeln('\x1b[31m[!] Reconnect failed\x1b[0m');
+        }
+      }
+    }, delay);
+  }
+
+  disconnect(): void {
+
+  this.manualDisconnect = true;
+ this.hasConnectedSuccessfully = false;
+  this.canReconnect = false;
+
+  this.reconnectAttempts = this.maxReconnectAttempts;
+
+  this.resetActiveConnection();
+
+  this.lastConfig = null;
+
+  this.resetTerminalDisplay();
+
+}
+
+  dispose(): void {
+    this.disconnect();
+    window.removeEventListener('resize', this.resizeListener);
+    this.terminalDisposables.forEach(d => d.dispose());
+    this.terminalDisposables = [];
+    this.terminal.dispose();
+  }
+
+  exportToFile(filename?: string): void {
+    const buffer = this.terminal.buffer.active;
+    const lines: string[] = [];
+    for (let i = 0; i < buffer.length; i++) {
+      const line = buffer.getLine(i);
+      if (line) {
+        lines.push(line.translateToString(true));
+      }
+    }
+    const text = lines.join('\n');
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    
+    let actualFilename = filename;
+    if (!actualFilename) {
+      const host = this.lastConfig?.host || 'terminal';
+      const port = this.lastConfig?.port || '';
+      const dateStr = new Date().toISOString().replace(/[:.]/g, '-');
+      actualFilename = `${host}_${port}_${dateStr}.txt`;
+    }
+    
+    a.download = actualFilename;
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+}
+
+// ==================== known_hosts 辅助函数 ====================
+
+/**
+ * 加载已知主机指纹（TOFU 验证用）
+ * 优先从云端（登录用户）加载，回退到 localStorage（匿名用户）
+ */
+export async function loadKnownFingerprint(host: string, port: number): Promise<string | null> {
+  // 先尝试云端（登录用户）
+  try {
+    const res = await fetch(`/api/known-hosts?host=${encodeURIComponent(host)}&port=${port}`);
+    if (res.ok) {
+      const data = await res.json() as { fingerprint: string | null };
+      if (data.fingerprint) return data.fingerprint;
+    }
+  } catch { /* 未登录或网络错误 */ }
+
+  // 回退到 localStorage
+  try {
+    const raw = localStorage.getItem('cloudssh_known_hosts');
+    if (raw) {
+      const map = JSON.parse(raw) as Record<string, string>;
+      return map[`${host}:${port}`] || null;
+    }
+  } catch { /* ignore */ }
+
+  return null;
+}
+
+/**
+ * 清除已知主机指纹（用于主机密钥变更后重新信任）
+ */
+export async function clearKnownFingerprint(host: string, port: number): Promise<void> {
+  // 清除 localStorage
+  try {
+    const raw = localStorage.getItem('cloudssh_known_hosts');
+    if (raw) {
+      const map = JSON.parse(raw) as Record<string, string>;
+      delete map[`${host}:${port}`];
+      localStorage.setItem('cloudssh_known_hosts', JSON.stringify(map));
+    }
+  } catch { /* ignore */ }
+
+  // 清除云端
+  try {
+    await fetch('/api/known-hosts', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ host, port }),
+    });
+  } catch { /* 未登录或网络错误 */ }
+}

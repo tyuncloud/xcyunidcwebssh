@@ -1,0 +1,6307 @@
+/* =====================================================
+   Tyun CloudSSH V2
+   IDC Landing Style
+   Orange Theme
+===================================================== */
+
+
+/* =========================
+   Global Reset
+========================= */
+
+
+* {
+
+    box-sizing:border-box;
+
+    margin:0;
+
+    padding:0;
+
+}
+
+
+html,
+body {
+
+
+    width:100%;
+
+    height:100%;
+
+
+    overflow:hidden;
+
+
+}
+
+
+body {
+
+
+    font-family:
+
+    "Microsoft YaHei",
+    "PingFang SC",
+    Arial,
+    sans-serif;
+
+
+    color:#1f2937;
+
+
+    background:
+
+
+    linear-gradient(
+
+        135deg,
+
+        #fff7ed 0%,
+
+        #ffffff 45%,
+
+        #fffaf5 100%
+
+    );
+
+
+}
+
+
+
+
+/* =========================
+   Main Layout
+========================= */
+
+
+.cloudssh-home {
+
+    width:100%;
+
+    min-height:100vh;
+
+    display:flex;
+
+    flex-direction:row;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:60px;
+
+    padding:40px;
+
+}
+
+
+
+
+
+/* =========================
+   Hide Old Header
+========================= */
+
+
+.tyun-old-header,
+.connection-title {
+
+
+    display:none!important;
+
+
+}
+
+
+
+
+
+
+/* =========================
+   Left Brand Area
+========================= */
+
+
+.cloudssh-brand {
+
+    width:520px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:flex-start;
+
+    align-items:flex-start;
+
+     padding-top:60px !important;
+
+}
+
+
+
+
+.cloudssh-brand h1 {
+
+
+    font-size:46px;
+
+
+    font-weight:900;
+
+
+    letter-spacing:-1px;
+
+
+    color:#111827;
+
+
+    margin-bottom:15px;
+
+
+}
+
+
+
+.cloudssh-brand h1::first-letter {
+
+
+    color:#ff7a00;
+
+
+}
+
+
+
+.cloudssh-brand p {
+
+
+    font-size:20px;
+
+
+    color:#64748b;
+
+
+    line-height:1.7;
+
+
+    margin-bottom:35px;
+
+
+}
+
+
+
+
+/* Main slogan */
+
+
+.cloudssh-brand-title {
+
+
+    font-size:38px;
+
+
+    font-weight:800;
+
+
+    color:#111827;
+
+
+    line-height:1.25;
+
+
+    margin-bottom:18px;
+
+
+}
+
+
+
+.cloudssh-brand-desc {
+
+
+    font-size:16px;
+
+
+    color:#64748b;
+
+
+    line-height:1.8;
+
+
+    max-width:420px;
+
+
+}
+
+
+
+
+
+
+/* Feature Cards */
+
+
+.cloudssh-feature-list {
+
+
+    display:flex;
+
+
+    gap:14px;
+
+
+    margin-top:35px;
+
+
+}
+
+
+
+.cloudssh-feature-item {
+
+
+    width:130px;
+
+
+    height:52px;
+
+
+    display:flex;
+
+
+    align-items:center;
+
+
+    justify-content:center;
+
+
+    border-radius:12px;
+
+
+    border:
+
+    1px solid #fed7aa;
+
+
+    background:#ffffff;
+
+
+    color:#ff7a00;
+
+
+    font-size:14px;
+
+
+    font-weight:600;
+
+
+}
+/* =========================
+   Right SSH Card
+========================= */
+
+
+.cloudssh-card {
+
+
+    width:400px;
+
+
+    background:#ffffff;
+
+
+    border-radius:22px;
+
+
+    padding:22px;
+
+
+    border:
+
+    1px solid #f1f5f9;
+
+
+    box-shadow:
+
+
+    0 25px 60px
+
+    rgba(255,122,0,.12);
+
+
+
+}
+
+
+
+
+
+
+/* Card Header */
+
+
+.cloudssh-card-header {
+
+
+    margin-bottom:25px;
+
+
+    padding-bottom:18px;
+
+
+    border-bottom:
+
+    1px solid #f1f5f9;
+
+
+}
+
+
+
+.cloudssh-card-header h2 {
+
+
+    font-size:24px;
+
+
+    font-weight:800;
+
+
+    color:#111827;
+
+
+}
+
+
+
+.cloudssh-card-header p {
+
+
+    margin-top:8px;
+
+
+    font-size:14px;
+
+
+    color:#64748b;
+
+
+}
+
+
+
+
+/* =========================
+   Form Fields
+========================= */
+
+
+.tyun-field {
+
+
+    margin-bottom:18px;
+
+
+}
+
+
+
+.tyun-field label {
+
+
+    display:block;
+
+
+    margin-bottom:8px;
+
+
+    color:#475569;
+
+
+    font-size:14px;
+
+
+    font-weight:600;
+
+
+}
+
+
+
+
+
+/* Host + Port */
+
+
+.tyun-grid {
+
+
+    display:grid;
+
+
+    grid-template-columns:
+
+    1fr 120px;
+
+
+    gap:14px;
+
+
+}
+
+
+
+
+
+
+/* Input Box */
+
+
+.tyun-input-box {
+
+
+    width:100%;
+
+
+    height:46px;
+
+
+    display:flex;
+
+
+    align-items:center;
+
+
+    gap:10px;
+
+
+    padding:0 14px;
+
+
+    background:#ffffff;
+
+
+    border:
+
+    1px solid #e2e8f0;
+
+
+    border-radius:12px;
+
+
+    transition:.2s;
+
+
+}
+
+
+
+
+.tyun-input-box:hover {
+
+
+    border-color:#fdba74;
+
+
+}
+
+
+
+
+
+.tyun-input-box:focus-within {
+
+
+    border-color:#ff7a00;
+
+
+    box-shadow:
+
+
+    0 0 0 4px
+
+    rgba(255,122,0,.12);
+
+
+
+}
+
+
+
+
+
+
+.tyun-input {
+
+
+    flex:1;
+
+
+    width:100%;
+
+
+    height:100%;
+
+
+    border:none;
+
+
+    outline:none;
+
+
+    background:transparent;
+
+
+    color:#111827;
+
+
+    font-size:16px;
+
+
+    font-weight:500;
+
+
+}
+
+
+
+
+
+.tyun-input::placeholder {
+
+
+    color:#94a3b8;
+
+
+}
+
+
+
+
+
+
+/* Icon */
+
+
+
+.tyun-input-box svg {
+
+
+    width:18px;
+
+
+    height:18px;
+
+
+    color:#ff7a00;
+
+
+}
+
+
+
+
+
+
+/* =========================
+   Auth Tabs
+========================= */
+
+
+.tyun-auth-tabs {
+
+
+    display:flex;
+
+
+    width:100%;
+
+
+    height:44px;
+
+
+    margin-bottom:14px;
+
+
+    border-radius:12px;
+
+
+    overflow:hidden;
+
+
+    border:
+
+    1px solid #fed7aa;
+
+
+}
+
+
+
+.auth-tab {
+
+
+    flex:1;
+
+
+    border:none;
+
+
+    background:#ffffff;
+
+
+    color:#64748b;
+
+
+    font-size:14px;
+
+
+    font-weight:600;
+
+
+    cursor:pointer;
+
+
+}
+
+
+
+
+
+.auth-tab-active {
+
+
+    background:
+
+
+    linear-gradient(
+
+        135deg,
+
+        #ff7a00,
+
+        #ff9d2e
+
+    );
+
+
+    color:#ffffff;
+
+
+}
+
+/* =========================
+   Password / Key Area
+========================= */
+
+
+textarea.tyun-input {
+
+
+    width:100%;
+
+
+    min-height:110px;
+
+
+    padding:14px;
+
+
+    resize:none;
+
+
+    border:
+
+    1px solid #e2e8f0;
+
+
+    border-radius:12px;
+
+
+    background:#ffffff;
+
+
+    color:#111827;
+
+
+    font-size:14px;
+
+
+    line-height:1.6;
+
+
+}
+
+
+
+textarea.tyun-input:focus {
+
+
+    outline:none;
+
+
+    border-color:#ff7a00;
+
+
+}
+
+
+
+
+
+
+/* File Upload Button */
+
+
+.tyun-file-button {
+
+
+    display:inline-flex;
+
+
+    align-items:center;
+
+
+    justify-content:center;
+
+
+    margin-top:10px;
+
+
+    height:36px;
+
+
+    padding:0 15px;
+
+
+    border-radius:10px;
+
+
+    background:#fff7ed;
+
+
+    border:
+
+    1px solid #fed7aa;
+
+
+    color:#ff7a00;
+
+
+    font-size:14px;
+
+
+    cursor:pointer;
+
+
+}
+
+
+
+
+.tyun-file-button:hover {
+
+
+    background:#ffedd5;
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   Remember Checkbox
+========================= */
+
+
+.tyun-checkbox {
+
+
+    display:flex;
+
+
+    align-items:center;
+
+
+    gap:8px;
+
+
+    margin-top:15px;
+
+
+    color:#64748b;
+
+
+    font-size:14px;
+
+
+}
+
+
+
+.tyun-checkbox input {
+
+
+    width:16px;
+
+
+    height:16px;
+
+
+    accent-color:#ff7a00;
+
+
+}
+
+
+
+
+
+
+/* =========================
+   Connect Button
+========================= */
+
+
+.tyun-connect-btn {
+
+
+    width:100%;
+
+
+    height:50px;
+
+
+    margin-top:22px;
+
+
+    border:none;
+
+
+    border-radius:14px;
+
+
+    cursor:pointer;
+
+
+    color:#ffffff;
+
+
+    font-size:16px;
+
+
+    font-weight:700;
+
+
+
+    background:
+
+
+    linear-gradient(
+
+        135deg,
+
+        #ff7a00,
+
+        #ff9d2e
+
+    );
+
+
+
+    box-shadow:
+
+
+    0 12px 30px
+
+    rgba(255,122,0,.28);
+
+
+
+    transition:.25s;
+
+
+}
+
+
+
+
+.tyun-connect-btn:hover {
+
+
+    transform:
+
+    translateY(-2px);
+
+
+    box-shadow:
+
+
+    0 18px 35px
+
+    rgba(255,122,0,.35);
+
+
+
+}
+
+
+
+
+
+
+.tyun-connect-btn:active {
+
+
+    transform:
+
+    translateY(0);
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   Status Area
+========================= */
+
+
+.tyun-status {
+
+
+    display:flex;
+
+
+    align-items:center;
+
+
+    justify-content:flex-start;
+
+
+    gap:8px;
+
+
+    margin-top:18px;
+
+
+    padding-top:15px;
+
+
+    border-top:
+
+    1px solid #f1f5f9;
+
+
+    color:#64748b;
+
+
+    font-size:14px;
+
+
+}
+
+
+
+.status-dot {
+
+
+    width:9px;
+
+
+    height:9px;
+
+
+    border-radius:50%;
+
+
+    background:#cbd5e1;
+
+
+}
+
+
+
+.status-online {
+
+
+    background:#22c55e;
+
+
+}
+
+
+
+
+
+
+/* =========================
+   Remove History Area
+========================= */
+
+
+/* 最近连接不显示 */
+
+
+.tyun-recent-connections,
+.recent-connections,
+#recent-connections {
+
+
+    display:none!important;
+
+
+}
+
+
+
+
+
+
+/* GitHub footer */
+
+
+.tyun-github-btn {
+
+
+    display:none!important;
+
+
+}
+
+/* =========================
+   Desktop Height Fix
+========================= */
+
+
+@media (max-height:850px){
+
+
+    .cloudssh-home {
+
+
+        padding:25px 60px;
+
+
+        gap:70px;
+
+
+    }
+
+
+
+    .cloudssh-brand {
+
+
+        width:420px;
+
+
+    }
+
+
+
+    .cloudssh-brand-title {
+
+
+        font-size:34px;
+
+
+    }
+
+
+
+    .cloudssh-brand h1 {
+
+
+        font-size:38px;
+
+
+    }
+
+
+
+
+    .cloudssh-card {
+
+
+        width:400px;
+
+
+        padding:24px;
+
+
+    }
+
+
+
+
+    .tyun-field {
+
+
+        margin-bottom:14px;
+
+
+    }
+
+
+
+    .tyun-connect-btn {
+
+
+        margin-top:15px;
+
+
+        height:46px;
+
+
+    }
+
+
+
+}
+
+
+
+
+
+
+/* =========================
+   Laptop 1366
+========================= */
+
+
+@media(max-width:1400px){
+
+
+    .cloudssh-home {
+
+
+        gap:50px;
+
+
+        padding:30px;
+
+
+    }
+
+
+
+
+    .cloudssh-brand {
+
+
+        width:380px;
+
+
+    }
+
+
+
+
+    .cloudssh-brand h1 {
+
+
+        font-size:34px;
+
+
+    }
+
+
+
+
+    .cloudssh-brand-title {
+
+
+        font-size:32px;
+
+
+    }
+
+
+
+
+    .cloudssh-card {
+
+
+        width:400px;
+
+
+    }
+
+
+
+}
+
+
+
+
+
+
+
+
+/* =========================
+   Tablet
+========================= */
+
+
+@media(max-width:900px){
+
+
+    html,
+    body {
+
+
+        overflow:auto;
+
+
+    }
+
+
+
+
+    .cloudssh-home{
+
+
+        height:auto;
+
+
+        min-height:100vh;
+
+
+        flex-direction:column;
+
+
+        justify-content:flex-start;
+
+
+        padding:40px 20px;
+
+
+        gap:30px;
+
+
+    }
+
+
+
+
+
+    .cloudssh-brand {
+
+
+        width:100%;
+
+
+        align-items:center;
+
+
+        text-align:center;
+
+
+    }
+
+
+
+
+    .cloudssh-brand-desc {
+
+
+        text-align:center;
+
+
+    }
+
+
+
+
+    .cloudssh-feature-list {
+
+
+        justify-content:center;
+
+
+    }
+
+
+
+}
+
+
+
+
+
+
+
+
+/* =========================
+   Mobile
+========================= */
+
+
+@media(max-width:520px){
+
+
+
+    .cloudssh-home {
+
+
+        padding:25px 15px;
+
+
+    }
+
+
+
+
+
+    .cloudssh-brand h1 {
+
+
+        font-size:30px;
+
+
+    }
+
+
+
+
+
+    .cloudssh-brand-title {
+
+
+        font-size:26px;
+
+
+    }
+
+
+
+
+
+    .cloudssh-brand p {
+
+
+        font-size:15px;
+
+
+    }
+
+
+
+
+
+    .cloudssh-feature-list {
+
+
+        display:none;
+
+
+    }
+
+
+
+
+
+    .cloudssh-card {
+
+
+        width:100%;
+
+
+        padding:20px;
+
+
+        border-radius:18px;
+
+
+    }
+
+
+
+
+
+    .tyun-grid {
+
+
+        grid-template-columns:
+
+
+        1fr;
+
+
+    }
+
+
+
+
+
+    .tyun-auth-tabs {
+
+
+        height:42px;
+
+
+    }
+
+
+
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   Smooth Animation
+========================= */
+
+
+.cloudssh-card,
+.cloudssh-brand {
+
+
+    animation:
+
+
+    tyunShow .35s ease;
+
+
+}
+
+
+
+
+
+@keyframes tyunShow {
+
+
+    from {
+
+
+        opacity:0;
+
+
+        transform:
+
+
+        translateY(20px);
+
+
+    }
+
+
+
+    to {
+
+
+        opacity:1;
+
+
+        transform:
+
+
+        translateY(0);
+
+
+    }
+
+
+}
+
+
+
+
+
+
+/* =========================
+   Old Cyber Cleanup
+========================= */
+
+
+.cyber-bg,
+.scanline,
+.scanlines,
+.glow,
+.terminal-effect {
+
+
+    display:none!important;
+
+
+}
+
+/* ==============================
+   CloudSSH SSH Card Final V1
+================================ */
+
+
+.cloudssh-card {
+
+    width:420px !important;
+
+    padding:24px !important;
+
+    border-radius:20px;
+
+}
+
+
+/* 标题 */
+
+.cloudssh-card-header h3 {
+
+    font-size:20px;
+    font-weight:700;
+    margin-bottom:6px;
+
+}
+
+
+.cloudssh-card-header p {
+
+    color:#64748b;
+    font-size:13px;
+    margin-bottom:25px;
+
+}
+
+
+/* 字段 */
+
+.cloudssh-field {
+
+    margin-bottom:18px !important;
+
+}
+
+
+.cloudssh-field label {
+
+    display:block;
+    font-size:13px;
+    font-weight:600;
+    margin-bottom:8px;
+
+}
+
+
+
+/* 输入框容器 */
+
+.cloudssh-input-box {
+
+    width:100% !important;
+
+    height:44px !important;
+
+    box-sizing:border-box;
+
+    display:flex !important;
+
+    align-items:center;
+
+    padding:0 12px;
+
+    gap:10px;
+
+    border:1px solid #d1d5db;
+
+    border-radius:8px;
+
+}
+
+
+
+/* 输入框 */
+
+.cloudssh-input-box input {
+
+    width:100% !important;
+
+    flex:1;
+
+    height:100%;
+
+    border:none !important;
+
+    outline:none;
+
+    font-size:14px;
+
+}
+
+
+
+/* 认证区域 */
+
+.cloudssh-auth-tabs {
+
+    display:flex;
+
+    gap:10px;
+
+    margin-bottom:15px;
+
+}
+
+
+
+.auth-tab {
+
+    flex:1;
+
+    height:38px;
+
+    border-radius:8px;
+
+    border:1px solid #ddd;
+
+    background:white;
+
+    font-size:13px;
+
+}
+
+
+.auth-tab-active {
+
+    background:#ff7a00 !important;
+
+    color:white !important;
+
+}
+
+
+
+/* 密码输入 */
+
+#auth-password-section {
+
+    margin-top:10px;
+
+}
+
+
+/* 下拉 */
+
+#anon-region {
+
+    width:100%;
+
+    height:44px;
+
+    border-radius:8px;
+
+}
+
+
+/* 保存 */
+
+.cloudssh-remember {
+
+    margin-top:12px;
+
+    margin-bottom:12px;
+
+}
+
+
+
+/* 连接按钮 */
+
+
+#connect-btn {
+
+    width:100% !important;
+
+    height:46px !important;
+
+    margin-top:15px;
+
+    border-radius:10px;
+
+    background:#ff7a00 !important;
+
+    color:white !important;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    border:none;
+
+    cursor:pointer;
+
+}
+
+
+#connect-btn:hover {
+
+    opacity:.85;
+
+}
+
+.cloudssh-card-header h3 {
+
+    font-size:18px !important;
+
+    font-weight:700;
+
+}
+
+/* ==========================
+   Real SSH Form Override
+========================== */
+
+
+/* 卡片 */
+
+.cloudssh-card {
+
+    width:430px !important;
+
+    padding:28px !important;
+
+}
+
+
+/* 输入区域 */
+
+.tyun-field {
+
+    margin-bottom:20px !important;
+
+}
+
+
+/* 标签 */
+
+.tyun-field label {
+
+    margin-bottom:8px !important;
+
+    font-size:13px !important;
+
+}
+
+
+/* 输入框 */
+
+.tyun-input-box {
+
+    height:46px !important;
+
+    border-radius:10px !important;
+
+}
+
+
+/* 输入文字 */
+
+.tyun-input {
+
+    font-size:14px !important;
+
+}
+
+
+/* 密码/密钥 */
+
+.tyun-auth-tabs {
+
+    margin-top:8px;
+
+    margin-bottom:16px;
+
+}
+
+
+/* 连接按钮 */
+
+.tyun-connect-btn {
+
+    height:48px !important;
+
+    margin-top:18px !important;
+
+}
+
+/* CloudSSH Compact Card */
+
+.cloudssh-card {
+
+    width:400px !important;
+
+    padding:24px !important;
+
+}
+
+
+.cloudssh-card-header {
+
+    margin-bottom:18px !important;
+
+    padding-bottom:12px !important;
+
+}
+
+
+.tyun-field {
+
+    margin-bottom:12px !important;
+
+}
+
+
+.tyun-input-box {
+
+    height:42px !important;
+
+}
+
+
+.tyun-auth-tabs {
+
+    height:38px !important;
+
+    margin-bottom:10px !important;
+
+}
+
+
+.tyun-connect-btn {
+
+    height:44px !important;
+
+    margin-top:12px !important;
+
+}
+
+
+.tyun-checkbox {
+
+    margin-top:8px !important;
+
+}
+
+/* ==========================
+   CloudSSH Final Polish
+========================== */
+
+
+/* 卡片顶部 */
+
+.cloudssh-card-header {
+
+    padding-bottom:18px !important;
+
+    border-bottom:1px solid #eef2f7;
+
+    margin-bottom:18px;
+
+}
+
+
+/* 卡片标题 */
+
+.cloudssh-card-header h3 {
+
+    font-size:18px !important;
+
+    font-weight:700;
+
+}
+
+
+
+/* 输入字段距离 */
+
+.cloudssh-field {
+
+    margin-bottom:14px !important;
+
+}
+
+
+
+/* 输入框 */
+
+.cloudssh-input-box {
+
+    height:42px !important;
+
+}
+
+
+
+/* 主按钮 */
+
+.connect-btn {
+
+    height:46px !important;
+
+    border-radius:10px !important;
+
+    box-shadow:
+    0 8px 20px rgba(255,122,0,.25);
+
+}
+
+/* ==========================
+   CloudSSH UI Small Polish
+   ========================== */
+
+
+/* 卡片标题区域 */
+
+.cloudssh-card-header {
+    padding-bottom:18px;
+    margin-bottom:18px;
+}
+
+
+/* 标题 */
+
+.cloudssh-card-header h3 {
+    font-size:18px;
+    font-weight:700;
+}
+
+
+/* 副标题 */
+
+.cloudssh-card-header p {
+    font-size:13px;
+    opacity:.65;
+}
+
+
+/* 输入区域间距 */
+
+.cloudssh-field {
+    margin-bottom:14px;
+}
+
+.brand-orange {
+
+    color:#ff7a00;
+
+}
+
+.cloudssh-terminal-preview {
+
+
+    margin-top:35px;
+
+
+    width:100%;
+
+
+    min-height:180px;
+
+
+    border-radius:20px;
+
+
+    background:
+    rgba(255,255,255,.75);
+
+
+    border:1px solid #fed7aa;
+
+
+    box-shadow:
+
+    0 25px 60px rgba(255,122,0,.12);
+
+
+    overflow:hidden;
+
+
+}
+
+.terminal-header {
+
+    height:42px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:0 16px;
+
+    color:#ff7a00;
+
+    font-size:13px;
+
+    border-bottom:1px solid #f1f5f9;
+
+}
+
+
+.terminal-dots {
+
+    display:flex;
+
+    gap:6px;
+
+}
+
+
+.terminal-dots span {
+
+    width:8px;
+
+    height:8px;
+
+    border-radius:50%;
+
+    background:#ff7a00;
+
+}
+
+.terminal-body {
+
+    padding:24px;
+
+    min-height:150px;
+
+    font-family:
+    "JetBrains Mono",
+    monospace;
+
+    font-size:14px;
+
+    line-height:2;
+
+    color:#475569;
+
+}
+
+
+.terminal-line {
+
+    opacity:.8;
+
+}
+
+
+.success {
+
+    color:#16a34a;
+
+}
+
+
+.cursor {
+
+
+    animation:
+
+    blink .8s infinite;
+
+
+    color:#ff7a00;
+
+
+}
+
+
+@keyframes blink {
+
+
+    50% {
+
+        opacity:0;
+
+    }
+
+}
+
+
+
+@keyframes blink {
+
+
+    50% {
+
+        opacity:0;
+
+    }
+
+
+}
+
+.terminal-command {
+
+
+    white-space:nowrap;
+
+
+    overflow:hidden;
+
+
+    width:0;
+
+
+    animation:
+
+    typing 2s steps(30) forwards;
+
+
+}
+
+
+
+.loading {
+
+
+    white-space:nowrap;
+
+
+    overflow:hidden;
+
+
+    width:0;
+
+
+    animation:
+
+    typing 3s steps(40) 2s forwards;
+
+
+}
+
+
+
+.success:nth-child(3){
+
+
+    white-space:nowrap;
+
+
+    overflow:hidden;
+
+
+    width:0;
+
+
+    animation:
+
+    typing 3s steps(40) 5s forwards;
+
+
+}
+
+
+
+.success:nth-child(4){
+
+
+    white-space:nowrap;
+
+
+    overflow:hidden;
+
+
+    width:0;
+
+
+    animation:
+
+    typing 3s steps(40) 8s forwards;
+
+
+}
+
+
+
+
+@keyframes typing {
+
+
+    from {
+
+        width:0;
+
+    }
+
+
+    to {
+
+        width:100%;
+
+    }
+
+
+}
+
+.terminal-command {
+
+    color:#334155;
+
+    font-weight:600;
+
+}
+
+
+
+.terminal-line {
+
+    color:#64748b;
+
+}
+
+
+
+.terminal-success {
+
+    color:#16a34a;
+
+}
+
+
+
+.terminal-cursor {
+
+    display:inline-block;
+
+    animation:
+    blink 1s infinite;
+
+    color:#ff7a00;
+
+    font-weight:bold;
+
+}
+
+
+
+@keyframes blink {
+
+
+    50% {
+
+        opacity:0;
+
+    }
+
+}
+
+.terminal-body div {
+
+    display:block !important;
+
+    opacity:1 !important;
+
+    transform:none !important;
+
+}
+
+/* CloudSSH Header Compact */
+
+.cloudssh-card-header {
+    padding-bottom:8px !important;
+    margin-bottom:12px !important;
+}
+
+
+.cloudssh-card-header h3 {
+    margin-bottom:4px !important;
+    font-size:18px !important;
+}
+
+
+.cloudssh-card-header p {
+    margin-top:2px !important;
+    margin-bottom:0 !important;
+    font-size:12px !important;
+}
+
+.cloudssh-terminal-preview {
+
+    margin-top:25px !important;
+
+}
+
+.cloudssh-features {
+
+    margin-top:18px !important;
+
+}
+
+.cloudssh-features {
+
+    margin-top:18px !important;
+
+    display:flex;
+
+    gap:20px;
+
+}
+
+
+.cloudssh-features span {
+
+    font-size:13px;
+
+    color:#64748b;
+
+    font-weight:600;
+
+}
+
+.cloudssh-terminal-preview {
+
+     margin-top:10px !important;
+
+}
+
+
+.cloudssh-features {
+
+    margin-top:18px !important;
+
+}
+
+
+.cloudssh-features span {
+
+    font-size:13px;
+
+    color:#64748b;
+
+    font-weight:600;
+
+}
+
+.cloudssh-brand h2 {
+
+    margin-bottom:20px !important;
+
+}
+
+.cloudssh-description {
+
+    max-width:360px;
+
+    line-height:1.8;
+
+}
+
+/* =================================
+   CloudSSH V1.5
+   Brand Glass Upgrade
+================================= */
+
+
+.cloudssh-brand {
+
+  position: relative;
+
+  padding: 40px;
+
+  background:
+    rgba(255,255,255,0.55);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  border: 1px solid rgba(255,255,255,0.7);
+
+  border-radius: 28px;
+
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.08);
+
+}
+
+/* ================================
+   CloudSSH V1.5 Brand Layout Fix
+================================ */
+
+
+.cloudssh-brand {
+
+    padding: 32px 40px;
+
+    min-height: 560px;
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+
+/* 描述区域压缩 */
+
+.cloudssh-description {
+
+    margin-top:28px;
+
+    margin-bottom:24px;
+
+}
+
+
+/* Terminal 自适应 */
+
+.cloudssh-terminal-preview {
+
+     flex:none;
+
+    min-height:180px;
+
+    margin-top:20px;
+
+    margin-bottom:20px;
+
+}
+
+
+
+/* Feature 保持底部 */
+
+
+.cloudssh-features {
+
+
+    margin-top:20px;
+}
+
+.cloudssh-brand::before {
+
+  content:"";
+
+  position:absolute;
+
+  inset:-1px;
+
+  border-radius:28px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,140,0,.18),
+      transparent 40%
+    );
+
+  pointer-events:none;
+
+}
+
+.cloudssh-brand h1,
+.cloudssh-brand h2,
+.cloudssh-brand p,
+.cloudssh-features,
+.cloudssh-terminal-preview {
+
+  position:relative;
+
+  z-index:1;
+
+}
+
+/* CloudSSH V1.5 safe spacing fix */
+
+.cloudssh-brand {
+
+    padding-top: 28px;
+    padding-bottom: 24px;
+
+}
+
+
+.cloudssh-brand h1 {
+
+    margin-top: 0;
+
+}
+
+
+.cloudssh-brand h2 {
+
+    margin-bottom: 12px;
+
+}
+
+
+.cloudssh-description {
+
+    margin-top: 18px;
+    margin-bottom: 18px;
+
+}
+
+/* CloudSSH V1.5 final spacing fix */
+
+.cloudssh-brand {
+
+    min-height: auto;
+
+}
+
+
+.cloudssh-brand p {
+
+    margin-bottom:20px;
+
+}
+
+
+.cloudssh-description {
+
+    margin-bottom:10px !important;
+
+}
+
+
+.cloudssh-terminal-preview {
+
+    margin-top:10px !important;
+
+}
+
+.cloudssh-terminal-preview {
+
+    width:100% !important;
+
+}
+
+/* =================================
+   CloudSSH V1.5 Brand Blend
+================================= */
+
+
+.cloudssh-brand {
+
+    background:
+    rgba(255,255,255,0.22);
+
+    backdrop-filter:
+    blur(20px);
+
+    -webkit-backdrop-filter:
+    blur(20px);
+
+    border:
+    1px solid rgba(255,255,255,0.35);
+
+    border-radius:28px;
+
+    box-shadow:
+    0 20px 50px rgba(0,0,0,.04);
+
+}
+
+.cloudssh-brand::before {
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(255,122,0,.12),
+        transparent 45%
+    );
+
+}
+
+.cloudssh-terminal-preview {
+    margin-top:45px !important;
+}
+
+/* =================================
+   CloudSSH V1.5.2 Hero Layout
+================================= */
+
+
+.cloudssh-brand {
+
+    padding: 45px 42px 35px;
+
+    min-height: 720px;
+
+    justify-content:flex-start;
+
+}
+
+/* =================================
+   CloudSSH Terminal Showcase
+================================= */
+
+
+.cloudssh-terminal-preview {
+
+    box-shadow:
+    0 18px 45px rgba(255,122,0,.10);
+
+}
+
+
+.cloudssh-terminal-header {
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+}
+
+
+.cloudssh-terminal-header::before {
+
+    content:"";
+
+    width:8px;
+
+    height:8px;
+
+    border-radius:50%;
+
+    background:#22c55e;
+
+}
+
+.cloudssh-features span {
+
+    padding:6px 12px;
+
+    border-radius:999px;
+
+    background:
+    rgba(255,255,255,.45);
+
+    border:
+    1px solid rgba(255,122,0,.15);
+
+}
+
+.cloudssh-status-panel {
+
+    display:flex;
+
+    gap:12px;
+
+    margin-top:25px;
+
+}
+
+
+.cloudssh-status-panel div {
+
+    padding:10px 14px;
+
+    border-radius:14px;
+
+    background:
+    rgba(255,255,255,.35);
+
+    border:
+    1px solid rgba(255,122,0,.12);
+
+    font-size:13px;
+
+}
+
+/* =================================
+   CloudSSH V1.5.4 Status Light
+================================= */
+
+
+.cloudssh-status-panel {
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:18px;
+
+    margin-top:20px;
+
+}
+
+
+.cloudssh-status-panel div {
+
+    padding:0;
+
+    background:transparent;
+
+    border:none;
+
+    font-size:13px;
+
+    color:#64748b;
+
+    white-space:nowrap;
+
+}
+
+.cloudssh-features {
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:14px;
+
+}
+
+
+.cloudssh-features span {
+
+    white-space:nowrap;
+
+    padding:7px 14px;
+
+    border-radius:999px;
+
+    font-size:13px;
+
+}
+
+.cloudssh-features {
+
+    margin-top:38px !important;
+
+}
+
+.cloudssh-brand::after {
+
+    content:"Secure cloud terminal platform";
+
+    display:block;
+
+    margin-top:45px;
+
+    text-align:center;
+
+    font-size:12px;
+
+    color:#94a3b8;
+
+}
+
+.cloudssh-error {
+
+    margin-top:12px;
+
+    color:#ef4444;
+
+    font-size:13px;
+
+    min-height:18px;
+
+}
+
+/* =================================
+   CloudSSH V1.6 Terminal Layout Fix
+================================= */
+
+
+#terminal-section {
+
+    display:flex;
+
+    flex-direction:column;
+
+    height:100vh;
+
+    overflow:hidden;
+
+}
+
+
+
+#terminal-section > header {
+
+    flex-shrink:0;
+
+}
+
+
+
+#tab-bar {
+
+    flex-shrink:0;
+
+}
+
+
+
+#terminal-section .flex.flex-1 {
+
+    min-height:0;
+
+}
+
+
+
+#terminal-container-wrapper {
+
+    height:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+
+
+#terminal-container {
+
+    height:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+
+
+#terminal-area {
+
+    flex:1;
+
+    min-height:0;
+
+    overflow:hidden;
+
+}
+
+
+
+#terminal-section footer {
+
+    flex-shrink:0;
+
+}
+
+.cloudssh-context-menu {
+
+  background:white;
+
+  border:1px solid #fed7aa;
+
+  border-radius:8px;
+
+  padding:6px;
+
+  box-shadow:0 10px 30px rgba(0,0,0,.15);
+
+  min-width:120px;
+
+  color:#1f2937;
+
+  font-size:14px;
+
+}
+
+
+.cloudssh-context-menu div {
+
+  padding:8px 12px;
+
+  cursor:pointer;
+
+  border-radius:6px;
+
+}
+
+
+.cloudssh-context-menu div:hover {
+
+  background:#fff7ed;
+
+}
+
+/* CloudSSH V1.6.3 Hide unused toolbar */
+#terminal-toolbar {
+    display: none;
+}
+
+
+.quick-action-btn {
+
+    width:100%;
+
+    height:40px;
+
+    margin-top:9px;
+
+    border-radius:9px;
+
+    background:#fff7ed;
+
+    border:1px solid #fed7aa;
+
+    color:#f97316;
+
+    font-size:14px;
+
+    cursor:pointer;
+
+}
+
+
+.quick-action-btn:hover {
+
+    background:#ffedd5;
+
+}
+
+/* ==========================
+   CloudSSH Mobile 优化
+   不影响 PC
+========================== */
+
+@media (max-width:768px){
+
+
+/* Terminal 主区域手机改上下布局 */
+
+#terminal-section .flex-1{
+    flex-direction: column;
+}
+
+
+
+/* 左侧 Connection */
+
+#server-sidebar{
+
+    width:100% !important;
+
+    max-height:420px;
+
+    overflow-y:auto;
+
+}
+
+
+
+/* Terminal区域 */
+
+#terminal-section{
+
+    overflow:hidden;
+
+}
+
+
+/* 快捷按钮 */
+
+#server-sidebar button{
+
+    width:100%;
+
+}
+
+
+}
+
+
+/* ==========================
+   Mobile Terminal Mode
+   手机端 Terminal 优化
+========================== */
+
+/* ==========================
+ CloudSSH Mobile Terminal Only
+ 手机端只显示Terminal
+========================== */
+
+
+@media(max-width:768px){
+
+
+/* 隐藏左侧服务器信息 */
+
+#server-sidebar{
+
+    display:none !important;
+
+}
+
+
+
+/* 主区域恢复单列 */
+
+#terminal-section .flex.flex-1{
+
+    display:flex !important;
+
+    flex-direction:column !important;
+
+}
+
+
+
+/* Terminal占满 */
+
+#terminal-container-wrapper{
+
+    width:100% !important;
+
+    height:100% !important;
+
+}
+
+
+
+/* 输入区域 */
+
+#terminal-section .terminal-input-area{
+
+    width:100% !important;
+
+}
+
+
+
+/* Footer隐藏 */
+
+#terminal-section footer{
+
+    display:none !important;
+
+}
+
+
+}
+
+/* 手机端隐藏服务器信息和快捷操作 */
+
+@media(max-width:768px){
+
+    .mobile-hide-sidebar{
+        display:none !important;
+    }
+
+
+    .mobile-hide-actions{
+        display:none !important;
+    }
+
+}
+
+
+/* ===================================
+   CloudSSH Homepage V2 Final Design
+   =================================== */
+
+
+/* 首页整体 */
+
+.cloudssh-home{
+
+    min-height:100vh;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:90px;
+
+    padding:50px;
+
+}
+
+
+/* 左侧品牌区域 */
+
+.cloudssh-brand{
+
+    width:560px;
+
+    padding:45px;
+
+    border-radius:30px;
+
+    background:
+    rgba(255,255,255,.55);
+
+    backdrop-filter:blur(20px);
+
+    box-shadow:
+    0 25px 60px rgba(0,0,0,.08);
+
+}
+
+
+
+/* Logo */
+
+.cloudssh-brand h1{
+
+
+    font-size:46px;
+
+    font-weight:900;
+
+    margin-bottom:20px;
+
+}
+
+
+/* 唐云颜色 */
+
+.brand-orange{
+
+    color:#ff7a00;
+
+}
+
+
+
+/* 主标题 */
+
+.cloudssh-brand h2{
+
+
+    font-size:30px;
+
+    font-weight:800;
+
+    color:#111827;
+
+}
+
+
+
+/* 描述 */
+
+.cloudssh-description{
+
+
+    font-size:16px;
+
+    color:#64748b;
+
+    line-height:1.8;
+
+}
+
+
+/* Terminal展示 */
+
+.cloudssh-terminal-preview{
+
+
+    margin-top:30px;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+
+    background:#0f172a;
+
+
+    box-shadow:
+
+    0 25px 50px rgba(0,0,0,.18);
+
+}
+
+
+
+/* Terminal顶部 */
+
+.terminal-header{
+
+
+    height:42px;
+
+    background:#111827;
+
+    color:#ff7a00;
+
+    display:flex;
+
+    align-items:center;
+
+    padding-left:20px;
+
+}
+
+
+/* Terminal内容 */
+
+.terminal-body{
+
+
+    color:#e5e7eb;
+
+    padding:25px;
+
+}
+
+
+
+/* 节点状态 */
+
+.cloudssh-status-panel{
+
+
+    margin-top:25px;
+
+    display:flex;
+
+    justify-content:center;
+
+}
+
+
+/* 状态卡 */
+
+.cloudssh-status-panel div{
+
+
+    background:white;
+
+    padding:15px 25px;
+
+    border-radius:20px;
+
+    box-shadow:
+
+    0 10px 30px rgba(0,0,0,.08);
+
+
+}
+
+
+
+/* 绿色节点 */
+
+.cloudssh-status-panel span:first-child{
+
+
+    font-size:22px;
+
+
+}
+
+
+
+/* 右侧卡片 */
+
+
+.cloudssh-card{
+
+
+    width:430px !important;
+
+
+    border-radius:25px;
+
+
+    padding:32px !important;
+
+
+    background:white;
+
+
+    box-shadow:
+
+
+    0 30px 70px rgba(255,122,0,.15);
+
+
+}
+
+
+
+/* 卡片标题 */
+
+
+.cloudssh-card-header h3{
+
+
+    font-size:22px !important;
+
+
+    font-weight:800;
+
+
+}
+
+
+
+
+/* 输入框 */
+
+
+.cloudssh-input-box{
+
+
+    height:48px !important;
+
+
+    border-radius:12px !important;
+
+
+}
+
+
+
+/* 连接按钮 */
+
+
+#connect-btn{
+
+
+    height:52px !important;
+
+
+    border-radius:14px !important;
+
+
+    font-size:16px !important;
+
+
+    background:
+
+    linear-gradient(
+        135deg,
+        #ff7a00,
+        #ff9d2e
+    ) !important;
+
+
+}
+
+
+
+/* 手机保护 */
+
+@media(max-width:900px){
+
+
+.cloudssh-home{
+
+
+    flex-direction:column;
+
+
+    padding:30px 15px;
+
+
+}
+
+
+
+.cloudssh-brand{
+
+
+    width:100%;
+
+
+}
+
+
+
+.cloudssh-card{
+
+
+    width:100% !important;
+
+
+}
+
+
+
+}
+
+/* =================================
+   CloudSSH Node Status V2
+================================= */
+
+
+.cloudssh-status-panel{
+
+
+    width:100%;
+
+    margin-top:25px;
+
+}
+
+
+
+
+.node-status-card{
+
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:22px;
+
+
+    background:
+
+    rgba(255,255,255,.7);
+
+
+    border:
+
+    1px solid rgba(255,122,0,.15);
+
+
+    border-radius:22px;
+
+
+    padding:18px 25px;
+
+
+    box-shadow:
+
+    0 15px 40px rgba(0,0,0,.08);
+
+
+}
+
+
+
+
+/* 绿色节点灯 */
+
+
+.node-light{
+
+
+    width:24px;
+
+    height:24px;
+
+
+    flex-shrink:0;
+
+
+    border-radius:50%;
+
+
+    background:#22c55e !important;
+
+
+    box-shadow:
+
+    0 0 15px rgba(34,197,94,.8);
+
+
+    animation:
+
+    nodePulse 2s infinite;
+
+
+}
+
+/* Terminal Window Dots */
+
+
+.terminal-dots{
+
+    display:flex;
+
+    gap:7px;
+
+    margin-right:10px;
+
+}
+
+
+.terminal-dots span{
+
+    width:10px;
+
+    height:10px;
+
+    border-radius:50%;
+
+}
+
+
+.terminal-dots span:nth-child(1){
+
+    background:#ef4444;
+
+}
+
+
+.terminal-dots span:nth-child(2){
+
+    background:#facc15;
+
+}
+
+
+.terminal-dots span:nth-child(3){
+
+    background:#22c55e;
+
+}
+
+
+
+.terminal-header{
+
+    display:flex;
+
+    align-items:center;
+
+}
+
+/* ===================================
+ CloudSSH Homepage V2.0 Polish
+=================================== */
+
+
+/* 首页整体 */
+
+.cloudssh-home{
+
+    gap:100px !important;
+
+}
+
+
+/* 左侧 */
+
+.cloudssh-brand{
+
+    width:620px !important;
+
+    padding:45px !important;
+
+}
+
+
+/* Logo */
+
+.cloudssh-brand h1{
+
+    font-size:52px !important;
+
+    letter-spacing:-2px;
+
+}
+
+
+/* 主标题 */
+
+.cloudssh-brand h2{
+
+    font-size:32px !important;
+
+    line-height:1.35;
+
+    margin-top:15px;
+
+}
+
+
+/* 描述 */
+
+.cloudssh-description{
+
+    font-size:18px !important;
+
+    line-height:1.8;
+
+    margin-top:25px;
+
+}
+
+
+/* 功能标签 */
+
+.cloudssh-features span{
+
+
+    padding:12px 20px !important;
+
+    border-radius:14px !important;
+
+
+    background:
+
+    rgba(255,255,255,.8);
+
+
+    box-shadow:
+
+    0 10px 30px rgba(0,0,0,.06);
+
+
+}
+
+
+
+/* Terminal窗口 */
+
+.cloudssh-terminal-preview{
+
+
+    margin-top:45px !important;
+
+
+    border-radius:22px !important;
+
+
+    overflow:hidden;
+
+
+    box-shadow:
+
+    0 30px 80px rgba(0,0,0,.22);
+
+
+}
+
+
+/* Terminal顶部 */
+
+.terminal-header{
+
+
+    height:48px !important;
+
+    font-size:14px;
+
+
+}
+
+
+
+/* Terminal字体 */
+
+.terminal-command{
+
+
+    color:#86efac !important;
+
+    font-weight:600;
+
+
+}
+
+
+.terminal-success{
+
+    color:#22c55e !important;
+
+}
+
+
+
+/* 节点卡 */
+
+
+.node-status-card{
+
+
+    width:100%;
+
+
+    justify-content:flex-start !important;
+
+
+    gap:35px !important;
+
+
+}
+
+
+
+/* 绿色节点 */
+
+.node-light{
+
+
+    width:18px !important;
+
+    height:18px !important;
+
+
+    background:#22c55e !important;
+
+
+}
+
+
+
+/* 右侧 */
+
+
+.cloudssh-card{
+
+
+    width:500px !important;
+
+
+    padding:40px !important;
+
+
+}
+
+
+/* 标题 */
+
+.cloudssh-card-header h3{
+
+
+    font-size:28px !important;
+
+
+}
+
+
+/* 输入框 */
+
+.cloudssh-input-box{
+
+
+    height:56px !important;
+
+
+    border-radius:16px !important;
+
+
+}
+
+
+/* 输入文字 */
+
+.terminal-input{
+
+
+    font-size:16px !important;
+
+}
+
+
+
+/* 连接按钮 */
+
+#connect-btn{
+
+
+    height:58px !important;
+
+
+    border-radius:18px !important;
+
+
+    font-size:18px !important;
+
+
+}
+
+
+/* 状态 */
+
+
+.cloudssh-status{
+
+
+    margin-top:20px;
+
+    font-size:15px;
+
+}
+
+/* ============================
+   Hero Typography V2
+============================ */
+
+
+.cloudssh-brand h2{
+
+    max-width:420px;
+
+    font-size:34px !important;
+
+    line-height:1.45;
+
+}
+
+
+.cloudssh-description{
+
+    margin-top:35px !important;
+
+    max-width:420px;
+
+    font-size:17px !important;
+
+}
+
+.node-info small{
+
+    color:#64748b;
+
+    font-size:12px;
+
+}
+/* =================================
+ CloudSSH Homepage Compact V2.1
+================================= */
+
+
+/* 整体 */
+
+.cloudssh-home{
+
+    gap:70px !important;
+
+    padding:30px !important;
+
+    align-items:center !important;
+
+}
+
+
+
+/* 左侧 */
+
+.cloudssh-brand{
+
+    width:540px !important;
+
+    padding:35px !important;
+
+}
+
+
+
+/* 标题 */
+
+.cloudssh-brand h1{
+
+    font-size:44px !important;
+
+}
+
+
+
+/* 副标题 */
+
+.cloudssh-brand h2{
+
+    font-size:28px !important;
+
+    margin-top:10px !important;
+
+}
+
+
+
+/* 描述 */
+
+.cloudssh-description{
+
+    margin-top:20px !important;
+
+    font-size:15px !important;
+
+}
+
+
+
+
+/* Terminal */
+
+.cloudssh-terminal-preview{
+
+    margin-top:30px !important;
+
+}
+
+
+.terminal-body{
+
+    padding:22px !important;
+
+}
+
+
+.cloudssh-terminal-preview{
+
+    height:auto !important;
+
+}
+
+
+
+
+
+/* 节点 */
+
+.node-status-card{
+
+
+    padding:14px 20px !important;
+
+
+}
+
+
+
+/* 右侧卡片 */
+
+
+.cloudssh-card{
+
+
+    width:430px !important;
+
+
+    padding:30px !important;
+
+
+}
+
+
+
+
+/* 卡片标题 */
+
+.cloudssh-card-header h3{
+
+
+    font-size:24px !important;
+
+
+}
+
+
+
+/* 输入框 */
+
+.cloudssh-input-box{
+
+
+    height:46px !important;
+
+
+}
+
+
+
+/* 字段间距 */
+
+.cloudssh-field{
+
+
+    margin-bottom:14px !important;
+
+
+}
+
+
+
+/* 按钮 */
+
+
+#connect-btn{
+
+
+    height:52px !important;
+
+
+}
+
+/* ==========================
+ Node Status V2 Compact
+========================== */
+
+
+.node-status-card{
+
+
+    height:82px;
+
+    padding:18px 25px !important;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+
+}
+
+
+
+/* 左侧健康状态 */
+
+
+.node-health{
+
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+
+}
+
+
+.node-light{
+
+
+    width:16px !important;
+
+    height:16px !important;
+
+
+    border-radius:50%;
+
+
+    background:#22c55e !important;
+
+
+    box-shadow:
+
+    0 0 15px rgba(34,197,94,.8);
+
+
+}
+
+
+
+
+.node-info{
+
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+
+
+.node-info span{
+
+
+    font-size:12px;
+
+    color:#64748b;
+
+}
+
+
+.node-info strong{
+
+
+    font-size:20px;
+
+    color:#16a34a;
+
+}
+
+
+.node-info small{
+
+
+    font-size:12px;
+
+    color:#94a3b8;
+
+
+}
+
+
+
+
+.node-item{
+
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+
+    padding-left:25px;
+
+
+    border-left:
+
+    1px solid #e5e7eb;
+
+
+}
+
+
+
+.node-item span{
+
+
+    font-size:12px;
+
+    color:#64748b;
+
+
+}
+
+
+.node-item b{
+
+
+    font-size:18px;
+
+    color:#334155;
+
+
+}
+/* ===========================
+   Node Status Final Style
+=========================== */
+
+
+.cloudssh-status-panel{
+
+    margin-top:20px !important;
+
+}
+
+
+
+.node-status-card{
+
+
+    height:100px !important;
+
+    width:100%;
+
+
+    padding:18px 28px !important;
+
+
+    border-radius:22px !important;
+
+
+    display:flex;
+
+
+    align-items:center;
+
+
+    justify-content:space-between;
+
+
+}
+
+
+
+
+
+.node-health{
+
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+
+}
+
+
+
+.node-light{
+
+
+    width:14px !important;
+
+    height:14px !important;
+
+
+}
+
+
+
+.node-info strong{
+
+
+    font-size:18px !important;
+
+
+}
+
+
+.node-info small{
+
+
+    display:block;
+
+    margin-top:3px;
+
+
+}
+
+
+
+
+.node-item{
+
+
+    border-left:none !important;
+
+
+    padding-left:15px !important;
+
+
+}
+
+
+
+.node-item b{
+
+
+    font-size:16px !important;
+
+
+}
+
+.cloudssh-status{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    color:#16a34a;
+
+    font-weight:600;
+
+}
+
+
+.status-dot{
+
+    width:10px;
+
+    height:10px;
+
+    background:#22c55e;
+
+    border-radius:50%;
+
+    display:inline-block;
+
+}
+
+/* ===================================
+ CloudSSH Homepage Final Compact
+=================================== */
+
+
+/* 页面整体 */
+
+.cloudssh-home{
+
+    min-height:100vh;
+
+    padding:20px 40px !important;
+
+    gap:60px !important;
+
+    align-items:center !important;
+
+}
+
+
+
+
+/* 左侧 */
+
+.cloudssh-brand{
+
+    width:520px !important;
+
+    padding:30px !important;
+
+    border-radius:26px !important;
+
+}
+
+
+
+
+
+/* Logo */
+
+.cloudssh-brand h1{
+
+
+    font-size:42px !important;
+
+    margin-bottom:10px !important;
+
+}
+
+
+
+
+
+/* 主标题 */
+
+.cloudssh-brand h2{
+
+
+    font-size:26px !important;
+
+    line-height:1.35 !important;
+
+
+    margin-bottom:18px !important;
+
+}
+
+
+
+
+/* 描述 */
+
+.cloudssh-description{
+
+    margin-bottom:10px !important;
+
+}
+
+
+.cloudssh-terminal-preview{
+
+    margin-top:20px !important;
+
+}
+
+
+
+
+/* Terminal */
+
+.cloudssh-terminal-preview{
+
+
+    margin-top:25px !important;
+
+
+    border-radius:20px !important;
+
+
+}
+
+
+
+.terminal-body{
+
+
+    padding:18px !important;
+
+
+    font-size:14px !important;
+
+
+}
+
+
+
+
+/* 节点区域 */
+
+.cloudssh-status-panel{
+
+
+    margin-top:15px !important;
+
+
+}
+
+
+
+.node-status-card{
+
+
+    height:72px !important;
+
+
+    padding:12px 18px !important;
+
+
+    border-radius:18px !important;
+
+
+}
+
+
+
+
+.node-light{
+
+
+    width:14px !important;
+
+    height:14px !important;
+
+}
+
+
+
+/* 功能标签 */
+
+
+.cloudssh-features{
+
+
+    margin-top:18px !important;
+
+
+}
+
+
+
+
+
+/* 右侧卡片 */
+
+
+.cloudssh-card{
+
+
+    width:430px !important;
+
+
+    padding:28px !important;
+
+
+    border-radius:24px !important;
+
+
+}
+
+
+
+/* 卡片标题 */
+
+
+.cloudssh-card-header h3{
+
+
+    font-size:24px !important;
+
+
+}
+
+
+
+
+/* 输入框 */
+
+.cloudssh-input-box{
+
+
+    height:44px !important;
+
+
+}
+
+
+
+
+/* 字段距离 */
+
+
+.cloudssh-card label{
+
+
+    margin-bottom:6px !important;
+
+
+}
+
+
+
+
+/* 按钮 */
+
+
+#connect-btn{
+
+
+    height:50px !important;
+
+
+}
+
+/* ==========================
+ CloudSSH Node Card V2
+========================== */
+
+
+.node-status-card{
+
+
+    width:100%;
+
+
+    height:82px;
+
+
+    display:flex;
+
+
+    align-items:center;
+
+
+    justify-content:space-between;
+
+
+    padding:15px 25px !important;
+
+
+    border-radius:20px !important;
+
+
+    box-sizing:border-box;
+
+
+}
+
+
+
+
+
+.node-main{
+
+
+    display:flex;
+
+
+    align-items:center;
+
+
+    gap:15px;
+
+
+}
+
+
+
+
+
+.node-light{
+
+
+    width:14px !important;
+
+
+    height:14px !important;
+
+
+    border-radius:50%;
+
+
+    background:#22c55e !important;
+
+
+    box-shadow:
+
+    0 0 15px rgba(34,197,94,.7);
+
+
+}
+
+
+
+
+
+.node-info{
+
+
+    display:flex;
+
+
+    flex-direction:column;
+
+
+}
+
+
+
+
+
+.node-info span{
+
+
+    font-size:13px;
+
+
+    color:#64748b;
+
+
+}
+
+
+
+
+
+.node-info strong{
+
+
+    font-size:18px;
+
+
+    color:#16a34a;
+
+
+}
+
+
+
+
+
+.node-info small{
+
+
+    font-size:12px;
+
+
+    color:#94a3b8;
+
+
+}
+
+
+
+
+.node-metric{
+
+
+    height:45px;
+
+
+    padding-left:30px;
+
+
+    border-left:
+
+    1px solid #e5e7eb;
+
+
+    display:flex;
+
+
+    flex-direction:column;
+
+
+    justify-content:center;
+
+
+}
+
+
+
+
+
+.node-metric span{
+
+
+    font-size:12px;
+
+
+    color:#64748b;
+
+
+}
+
+
+
+
+
+.node-metric strong{
+
+
+    font-size:16px;
+
+
+    color:#334155;
+
+
+}
+
+/* =====================================
+   CloudSSH Node Status Final Override
+   2026 Fix
+===================================== */
+
+
+.cloudssh-status-panel{
+
+    width:100% !important;
+
+    margin-top:15px !important;
+
+    display:flex !important;
+
+    justify-content:center !important;
+
+}
+
+
+
+.node-status-card{
+
+
+    width:100% !important;
+
+    height:72px !important;
+
+
+    display:flex !important;
+
+    align-items:center !important;
+
+    justify-content:space-between !important;
+
+
+    padding:12px 18px !important;
+
+
+    border-radius:18px !important;
+
+
+    box-sizing:border-box !important;
+
+
+    overflow:hidden !important;
+
+
+}
+
+
+
+/* 左侧 */
+
+
+.node-main{
+
+
+    display:flex !important;
+
+    align-items:center !important;
+
+    gap:12px !important;
+
+
+    flex:1;
+
+
+}
+
+
+
+.node-light{
+
+
+    width:14px !important;
+
+    height:14px !important;
+
+
+    flex:none;
+
+
+}
+
+
+
+.node-info{
+
+
+    display:flex !important;
+
+    flex-direction:column !important;
+
+
+}
+
+
+
+.node-info span{
+
+
+    font-size:12px !important;
+
+
+}
+
+
+
+.node-info strong{
+
+
+    font-size:17px !important;
+
+    line-height:20px !important;
+
+
+}
+
+
+
+.node-info small{
+
+
+    font-size:11px !important;
+
+
+}
+
+
+
+
+/* 延迟 / 节点 */
+
+
+.node-metric,
+.node-item{
+
+
+    height:40px !important;
+
+
+    min-width:90px;
+
+
+    padding-left:18px !important;
+
+
+    border-left:1px solid #e5e7eb !important;
+
+
+    display:flex !important;
+
+    flex-direction:column !important;
+
+    align-items:center !important;
+
+    justify-content:center !important;
+
+
+}
+
+
+
+.node-metric span,
+.node-item span{
+
+
+    font-size:11px !important;
+
+
+}
+
+
+
+.node-metric strong,
+.node-item b{
+
+
+    font-size:15px !important;
+
+
+}
+
+/* =====================================
+   CloudSSH Node Status Final Fix V3
+===================================== */
+
+
+.cloudssh-status-panel{
+
+    margin-top:22px !important;
+
+    width:100% !important;
+
+}
+
+
+
+.node-status-card{
+
+
+    height:70px !important;
+
+    width:100% !important;
+
+
+    padding:0 18px !important;
+
+
+    background:#ffffff !important;
+
+
+    border-radius:18px !important;
+
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,.08);
+
+
+    display:flex !important;
+
+
+    align-items:center !important;
+
+
+    justify-content:space-between !important;
+
+
+}
+
+
+
+/* 左侧状态 */
+
+.node-main{
+
+
+    width:45% !important;
+
+
+    display:flex !important;
+
+
+    align-items:center !important;
+
+
+    gap:12px !important;
+
+
+}
+
+
+.node-light{
+
+
+    width:16px !important;
+
+    height:16px !important;
+
+
+}
+
+
+
+.node-info span{
+
+
+    font-size:12px !important;
+
+
+}
+
+
+.node-info strong{
+
+
+    font-size:16px !important;
+
+
+    line-height:18px !important;
+
+
+}
+
+
+.node-info small{
+
+
+    font-size:11px !important;
+
+
+}
+
+
+
+
+
+/* 中间延迟 */
+
+
+.node-metric{
+
+
+    width:25% !important;
+
+
+    height:40px !important;
+
+
+    padding-left:0 !important;
+
+
+    border-left:1px solid #eeeeee !important;
+
+
+    display:flex !important;
+
+
+    align-items:center !important;
+
+
+    justify-content:center !important;
+
+
+}
+
+
+
+
+/* 右侧节点 */
+
+
+.node-item{
+
+
+    width:30% !important;
+
+
+    height:40px !important;
+
+
+    padding-left:0 !important;
+
+
+    border-left:1px solid #eeeeee !important;
+
+
+    display:flex !important;
+
+
+    align-items:center !important;
+
+
+    justify-content:center !important;
+
+
+}
+
+
+
+.node-metric span,
+.node-item span{
+
+
+    font-size:11px !important;
+
+}
+
+
+
+.node-metric strong,
+.node-item b{
+
+
+    font-size:15px !important;
+
+}
+
+.cloudssh-home{
+
+    max-width:1200px !important;
+
+    margin:0 auto;
+
+    gap:80px !important;
+
+}
+
+
+/* =========================================================
+   唐云 CloudSSH 首页 V2 - FINAL OVERRIDE
+   只负责首页最终视觉
+   不修改 Terminal 页面 / SSH / WebSocket
+   ========================================================= */
+
+
+/* =========================================================
+   1. 首页整体
+   ========================================================= */
+
+#auth-section {
+    width: 100%;
+    min-height: 100vh;
+}
+
+#connection-form-container {
+    width: 100%;
+    min-height: 100vh;
+}
+
+.cloudssh-home {
+    width: 100% !important;
+    max-width: 1120px !important;
+    min-height: 100vh !important;
+
+    margin: 0 auto !important;
+
+    padding: 28px 24px !important;
+
+    display: flex !important;
+    flex-direction: row !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    gap: 56px !important;
+}
+
+
+/* =========================================================
+   2. 左侧品牌卡片
+   ========================================================= */
+
+.cloudssh-brand {
+    width: 520px !important;
+    min-height: 0 !important;
+    height: auto !important;
+
+    padding: 28px 30px 26px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 247, 237, .82),
+            rgba(255, 255, 255, .70)
+        ) !important;
+
+    border: 1px solid rgba(255,255,255,.72) !important;
+
+    border-radius: 26px !important;
+
+    box-shadow:
+        0 22px 55px rgba(15, 23, 42, .07) !important;
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    box-sizing: border-box !important;
+}
+
+
+/* 不允许旧 min-height 继续撑高 */
+
+.cloudssh-brand::before {
+    border-radius: 26px !important;
+}
+
+
+/* Logo */
+
+.cloudssh-brand h1 {
+    margin: 0 0 8px 0 !important;
+
+    font-size: 42px !important;
+    line-height: 1.1 !important;
+
+    font-weight: 900 !important;
+
+    letter-spacing: -1.5px !important;
+
+    color: #111827 !important;
+}
+
+.brand-orange {
+    color: #ff7600 !important;
+}
+
+
+/* 产品标题 */
+
+.cloudssh-brand h2 {
+    margin: 0 !important;
+
+    max-width: 100% !important;
+
+    font-size: 25px !important;
+    line-height: 1.35 !important;
+
+    font-weight: 800 !important;
+
+    color: #111827 !important;
+}
+
+
+/* 描述 */
+
+.cloudssh-description {
+    margin: 34px 0 0 0 !important;
+
+    max-width: 410px !important;
+
+    font-size: 14px !important;
+    line-height: 1.7 !important;
+
+    color: #64748b !important;
+}
+
+
+/* =========================================================
+   3. Terminal Preview
+   ========================================================= */
+
+.cloudssh-terminal-preview {
+    width: 100% !important;
+
+    min-height: 0 !important;
+    height: 255px !important;
+
+    margin: 36px 0 0 0 !important;
+
+    overflow: hidden !important;
+
+    background: #101827 !important;
+
+    border: 1px solid rgba(255,122,0,.18) !important;
+    border-radius: 18px !important;
+
+    box-shadow:
+        0 20px 42px rgba(15, 23, 42, .17) !important;
+
+    flex: none !important;
+}
+
+
+/* Terminal 顶栏 */
+
+.terminal-header {
+    height: 46px !important;
+
+    padding: 0 18px !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    gap: 10px !important;
+
+    background: #111827 !important;
+
+    border-bottom: 1px solid #475569 !important;
+
+    color: #ff7600 !important;
+
+    font-size: 13px !important;
+}
+
+
+/* 三色点 */
+
+.terminal-dots {
+    display: flex !important;
+
+    align-items: center !important;
+
+    gap: 7px !important;
+
+    margin-right: 10px !important;
+}
+
+.terminal-dots span {
+    width: 9px !important;
+    height: 9px !important;
+
+    padding: 0 !important;
+
+    border: none !important;
+    border-radius: 50% !important;
+
+    box-shadow: none !important;
+}
+
+.terminal-dots span:nth-child(1) {
+    background: #ef4444 !important;
+}
+
+.terminal-dots span:nth-child(2) {
+    background: #facc15 !important;
+}
+
+.terminal-dots span:nth-child(3) {
+    background: #22c55e !important;
+}
+
+
+/* Terminal 内容 */
+
+.terminal-body {
+    min-height: 0 !important;
+
+    padding: 18px 20px !important;
+
+    font-family: "JetBrains Mono", monospace !important;
+
+    font-size: 13px !important;
+    line-height: 2 !important;
+
+    color: #94a3b8 !important;
+}
+
+.terminal-command {
+    color: #86efac !important;
+    font-weight: 700 !important;
+}
+
+.terminal-line {
+    color: #64748b !important;
+}
+
+.terminal-success {
+    color: #22c55e !important;
+}
+
+.terminal-cursor {
+    color: #ff7600 !important;
+}
+
+
+/* =========================================================
+   4. 节点状态 —— 最终版
+   ========================================================= */
+
+.cloudssh-status-panel {
+    width: 100% !important;
+
+    margin: 18px 0 0 0 !important;
+
+    padding: 0 !important;
+
+    display: block !important;
+}
+
+
+/*
+   重要：
+   把旧代码里
+   .cloudssh-status-panel div
+   对所有 div 的影响全部覆盖掉
+*/
+
+.cloudssh-status-panel div {
+    box-sizing: border-box !important;
+}
+
+
+/* 整个节点卡，只有这一整块有背景 */
+
+.node-status-card {
+    width: 100% !important;
+    height: 76px !important;
+
+    margin: 0 !important;
+    padding: 0 22px !important;
+
+    display: grid !important;
+
+    grid-template-columns:
+        minmax(190px, 1.45fr)
+        minmax(90px, .70fr)
+        minmax(110px, .85fr) !important;
+
+    align-items: center !important;
+
+    column-gap: 0 !important;
+
+    overflow: hidden !important;
+
+    background: rgba(255,255,255,.88) !important;
+
+    border: 1px solid rgba(226,232,240,.72) !important;
+
+    border-radius: 18px !important;
+
+    box-shadow:
+        0 12px 28px rgba(15,23,42,.07) !important;
+}
+
+
+/* 兼容你前面用过的 node-main / node-health */
+
+.node-main,
+.node-health {
+    width: auto !important;
+    min-width: 0 !important;
+    height: 48px !important;
+
+    margin: 0 !important;
+    padding: 0 18px 0 0 !important;
+
+    display: flex !important;
+    flex-direction: row !important;
+
+    align-items: center !important;
+    justify-content: flex-start !important;
+
+    gap: 12px !important;
+
+    background: transparent !important;
+
+    border: none !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+}
+
+
+/* 绿色节点灯 */
+
+.node-light {
+    width: 14px !important;
+    height: 14px !important;
+
+    min-width: 14px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    flex: 0 0 14px !important;
+
+    background: #22c55e !important;
+
+    border: none !important;
+    border-radius: 50% !important;
+
+    box-shadow:
+        0 0 0 5px rgba(34,197,94,.10),
+        0 0 14px rgba(34,197,94,.34) !important;
+}
+
+
+/* 节点状态文字 */
+
+.node-info {
+    min-width: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+
+    align-items: flex-start !important;
+    justify-content: center !important;
+
+    background: transparent !important;
+
+    border: none !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+}
+
+.node-info span {
+    margin: 0 !important;
+    padding: 0 !important;
+
+    font-size: 12px !important;
+    line-height: 15px !important;
+
+    color: #64748b !important;
+}
+
+.node-info strong {
+    margin: 1px 0 0 0 !important;
+    padding: 0 !important;
+
+    font-size: 16px !important;
+    line-height: 18px !important;
+
+    font-weight: 800 !important;
+
+    color: #16a34a !important;
+}
+
+.node-info small {
+    margin: 2px 0 0 0 !important;
+    padding: 0 !important;
+
+    font-size: 10px !important;
+    line-height: 12px !important;
+
+    color: #94a3b8 !important;
+}
+
+
+/* 延迟、节点 */
+
+.node-metric,
+.node-item {
+    width: auto !important;
+    min-width: 0 !important;
+    height: 44px !important;
+
+    margin: 0 !important;
+    padding: 0 12px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    background: transparent !important;
+
+    border: none !important;
+    border-left: 1px solid #e5e7eb !important;
+
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+}
+
+
+/* 如果同时存在 node-item / node-metric，统一 */
+
+.node-metric span,
+.node-item span {
+    margin: 0 !important;
+    padding: 0 !important;
+
+    font-size: 11px !important;
+    line-height: 14px !important;
+
+    color: #64748b !important;
+}
+
+.node-metric strong,
+.node-item strong,
+.node-item b {
+    margin: 2px 0 0 0 !important;
+    padding: 0 !important;
+
+    font-size: 14px !important;
+    line-height: 17px !important;
+
+    font-weight: 700 !important;
+
+    color: #334155 !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* =========================================================
+   5. 左侧三个功能标签
+   ========================================================= */
+
+.cloudssh-features {
+    width: 100% !important;
+
+    margin: 18px 0 0 0 !important;
+
+    display: grid !important;
+
+    grid-template-columns: repeat(3, 1fr) !important;
+
+    gap: 10px !important;
+}
+
+.cloudssh-features span {
+    min-width: 0 !important;
+
+    padding: 9px 8px !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    white-space: nowrap !important;
+
+    background: rgba(255,255,255,.72) !important;
+
+    border: 1px solid rgba(255,122,0,.22) !important;
+
+    border-radius: 12px !important;
+
+    box-shadow: none !important;
+
+    color: #64748b !important;
+
+    font-size: 12px !important;
+    font-weight: 600 !important;
+}
+
+
+/* 左下角 footer */
+
+.cloudssh-brand::after {
+    margin-top: 32px !important;
+
+    text-align: left !important;
+
+    font-size: 11px !important;
+
+    color: #94a3b8 !important;
+}
+
+
+/* =========================================================
+   6. 右侧 SSH 卡片 - 最终优化版
+   ========================================================= */
+
+
+/* =========================
+   右侧整体卡片
+   ========================= */
+
+.cloudssh-card {
+    width: 430px !important;
+
+    min-height: 0 !important;
+    height: auto !important;
+
+    padding: 28px !important;
+
+    background: rgba(255,255,255,.96) !important;
+
+    border: 1px solid #e7ebf1 !important;
+    border-radius: 24px !important;
+
+    box-shadow:
+        0 22px 52px rgba(15,23,42,.08),
+        0 12px 28px rgba(255,122,0,.06) !important;
+
+    box-sizing: border-box !important;
+}
+
+
+/* =========================
+   顶部标题
+   ========================= */
+
+.cloudssh-card-header {
+    margin: 0 0 16px 0 !important;
+
+    padding: 0 0 14px 0 !important;
+
+    border-bottom: 1px solid #eef2f7 !important;
+}
+
+
+.cloudssh-card-header h3 {
+    margin: 0 0 4px 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    gap: 8px !important;
+
+    font-size: 22px !important;
+    line-height: 1.2 !important;
+
+    font-weight: 800 !important;
+
+    color: #111827 !important;
+}
+
+
+/* 标题右侧小盾牌 */
+
+.cloudssh-card-header h3::after {
+    content: "🛡️";
+
+    font-size: 16px;
+
+    display: inline-block;
+}
+
+
+.cloudssh-card-header p {
+    margin: 0 !important;
+
+    color: #94a3b8 !important;
+
+    font-size: 11px !important;
+    line-height: 1.4 !important;
+}
+
+
+/* =========================
+   表单字段
+   ========================= */
+
+.cloudssh-field {
+    margin-bottom: 12px !important;
+}
+
+
+.cloudssh-field label {
+    display: block !important;
+
+    margin-bottom: 6px !important;
+
+    color: #111827 !important;
+
+    font-size: 12px !important;
+    font-weight: 700 !important;
+}
+
+
+/* =========================
+   IP + 端口
+   ========================= */
+
+.cloudssh-field-row {
+    width: 100% !important;
+
+    display: grid !important;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        102px !important;
+
+    gap: 10px !important;
+}
+
+
+/* =========================
+   所有输入框
+   ========================= */
+
+.cloudssh-input-box {
+    width: 100% !important;
+    height: 44px !important;
+
+    padding: 0 12px !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    gap: 10px !important;
+
+    background: #ffffff !important;
+
+    border: 1px solid #d8dee8 !important;
+
+    border-radius: 11px !important;
+
+    box-shadow: none !important;
+
+    transition:
+        border-color .18s ease,
+        box-shadow .18s ease,
+        background .18s ease !important;
+}
+
+
+.cloudssh-input-box:hover {
+    border-color: #fdba74 !important;
+
+    background: #fffdfa !important;
+}
+
+
+.cloudssh-input-box:focus-within {
+    border-color: #ff7600 !important;
+
+    background: #ffffff !important;
+
+    box-shadow:
+        0 0 0 3px rgba(255,118,0,.08) !important;
+}
+
+
+/* 输入框里面文字 */
+
+.cloudssh-input-box input {
+    min-width: 0 !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    padding: 0 !important;
+
+    border: none !important;
+    outline: none !important;
+
+    background: transparent !important;
+
+    color: #111827 !important;
+
+    font-size: 14px !important;
+    font-weight: 500 !important;
+}
+
+
+.cloudssh-input-box input::placeholder {
+    color: #94a3b8 !important;
+}
+
+
+/* =========================
+   端口前面的 : 改成 #
+   ========================= */
+
+/*
+   你现在 auth-form.ts 里面端口前面实际是：
+   <span>:</span>
+
+   这里不用动 TS，
+   CSS 直接把 : 隐藏，
+   再显示 #
+*/
+
+.port-field .cloudssh-input-box > span {
+    font-size: 0 !important;
+
+    color: #475569 !important;
+
+    font-weight: 800 !important;
+}
+
+
+.port-field .cloudssh-input-box > span::after {
+    content: "#";
+
+    font-size: 16px !important;
+
+    color: #475569 !important;
+
+    font-weight: 800 !important;
+}
+
+
+/* =========================
+   登录方式按钮
+   ========================= */
+
+.cloudssh-auth-tabs {
+    width: 100% !important;
+    height: 40px !important;
+
+    margin-bottom: 10px !important;
+
+    display: flex !important;
+
+    gap: 10px !important;
+}
+
+
+.auth-tab {
+    flex: 1 !important;
+
+    height: 40px !important;
+
+    border: 1px solid #e5e7eb !important;
+
+    border-radius: 10px !important;
+
+    background: #ffffff !important;
+
+    color: #64748b !important;
+
+    font-size: 12px !important;
+    font-weight: 700 !important;
+
+    cursor: pointer !important;
+
+    transition:
+        border-color .18s ease,
+        background .18s ease,
+        color .18s ease,
+        transform .18s ease !important;
+}
+
+
+.auth-tab:hover {
+    border-color: #fdba74 !important;
+
+    background: #fffaf5 !important;
+}
+
+
+/* 当前选中的登录方式 */
+
+.auth-tab-active {
+    background:
+        linear-gradient(
+            135deg,
+            #ff7600,
+            #ff9828
+        ) !important;
+
+    border-color: #ff7600 !important;
+
+    color: #ffffff !important;
+
+    box-shadow:
+        0 6px 15px rgba(255,118,0,.15) !important;
+}
+
+
+/* 密码按钮前面增加锁 */
+
+#auth-tab-password::before {
+    content: "🔒";
+
+    margin-right: 6px;
+
+    font-size: 12px;
+}
+
+
+/* SSH 密钥按钮前面增加钥匙 */
+
+#auth-tab-key::before {
+    content: "🔑";
+
+    margin-right: 6px;
+
+    font-size: 12px;
+}
+
+
+/* =========================
+   密码框
+   ========================= */
+
+#auth-password-section {
+    margin-top: 0 !important;
+}
+
+
+/* 密码框左侧旧钥匙稍微统一 */
+
+#auth-password-section .cloudssh-input-box > span {
+    display: flex !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+
+    width: 18px;
+
+    flex: 0 0 18px;
+}
+
+
+
+
+/* =========================
+   节点区域选择框
+   ========================= */
+
+.region-select-box {
+    width: 100% !important;
+    height: 44px !important;
+
+    padding: 0 12px !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    gap: 10px !important;
+
+    background: #ffffff !important;
+
+    border: 1px solid #cbd5e1 !important;
+
+    border-radius: 10px !important;
+
+    box-sizing: border-box !important;
+
+    transition:
+        border-color .18s ease,
+        box-shadow .18s ease,
+        background .18s ease !important;
+}
+
+
+/* 鼠标经过 */
+
+.region-select-box:hover {
+    border-color: #fdba74 !important;
+
+    background: #fffdfa !important;
+}
+
+
+/* 下拉框聚焦 */
+
+.region-select-box:focus-within {
+    border-color: #ff7600 !important;
+
+    background: #ffffff !important;
+
+    box-shadow:
+        0 0 0 3px rgba(255,118,0,.08) !important;
+}
+
+
+/* 绿色节点圆点 */
+
+.region-status-dot {
+    width: 10px !important;
+    height: 10px !important;
+
+    min-width: 10px !important;
+
+    display: inline-block !important;
+
+    flex: 0 0 10px !important;
+
+    background: #22c55e !important;
+
+    border-radius: 50% !important;
+
+    box-shadow:
+        0 0 0 4px rgba(34,197,94,.10),
+        0 0 10px rgba(34,197,94,.28) !important;
+}
+
+
+/* 真正的 select */
+
+#region-select-box,
+#anon-region {
+    flex: 1 !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    padding: 0 !important;
+
+    background: transparent !important;
+
+    border: none !important;
+
+    outline: none !important;
+
+    color: #111827 !important;
+
+    font-size: 13px !important;
+
+    cursor: pointer !important;
+}
+
+
+/* =========================
+   记住服务器地址
+   ========================= */
+
+.cloudssh-remember {
+    margin: 10px 0 0 0 !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    gap: 8px !important;
+
+    color: #475569 !important;
+
+    font-size: 12px !important;
+}
+
+
+.cloudssh-remember input {
+    width: 15px !important;
+    height: 15px !important;
+
+    accent-color: #ff7600 !important;
+}
+
+
+/* =========================
+   连接服务器按钮
+   ========================= */
+
+#connect-btn {
+    width: 100% !important;
+    height: 50px !important;
+
+    margin-top: 16px !important;
+
+    border: none !important;
+
+    border-radius: 12px !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff7600 0%,
+            #ff9223 100%
+        ) !important;
+
+    color: #ffffff !important;
+
+    font-size: 15px !important;
+    font-weight: 800 !important;
+
+    cursor: pointer !important;
+
+    box-shadow:
+        0 10px 22px rgba(255,118,0,.20) !important;
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        filter .18s ease !important;
+}
+
+
+#connect-btn:hover {
+    opacity: 1 !important;
+
+    transform: translateY(-1px) !important;
+
+    filter: brightness(1.03) !important;
+
+    box-shadow:
+        0 14px 28px rgba(255,118,0,.26) !important;
+}
+
+
+#connect-btn:active {
+    transform: translateY(0) !important;
+}
+
+
+/* =========================
+   错误提示
+   ========================= */
+
+.cloudssh-error {
+    min-height: 16px !important;
+
+    margin-top: 8px !important;
+
+    color: #ef4444 !important;
+
+    font-size: 11px !important;
+}
+
+
+/* =========================
+   底部状态
+   ========================= */
+
+.cloudssh-status {
+    min-height: 20px !important;
+
+    margin-top: 16px !important;
+
+    padding: 0 !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    gap: 7px !important;
+
+    border: none !important;
+
+    color: #16a34a !important;
+
+    font-size: 11px !important;
+    font-weight: 700 !important;
+}
+
+
+.status-dot {
+    width: 8px !important;
+    height: 8px !important;
+
+    display: inline-block !important;
+
+    background: #22c55e !important;
+
+    border-radius: 50% !important;
+
+    box-shadow:
+        0 0 0 3px rgba(34,197,94,.10) !important;
+}
+
+
+/* =========================================================
+   7. 小屏幕首页适配
+   注意：只作用 auth-section 首页
+   不碰 terminal-section
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    #auth-section .cloudssh-home {
+        width: 100% !important;
+
+        max-width: 620px !important;
+
+        min-height: 100vh !important;
+
+        padding: 24px 16px !important;
+
+        flex-direction: column !important;
+
+        gap: 22px !important;
+    }
+
+    #auth-section .cloudssh-brand,
+    #auth-section .cloudssh-card {
+        width: 100% !important;
+    }
+
+    #auth-section .cloudssh-brand {
+        padding: 24px !important;
+    }
+
+    #auth-section .cloudssh-card {
+        padding: 24px !important;
+    }
+}
