@@ -305,7 +305,7 @@ terminal.connectWithWebSocket(
 <h1>
 
 <span class="brand-orange">
-    唐云
+    小财云
 </span>
 
 <span>
