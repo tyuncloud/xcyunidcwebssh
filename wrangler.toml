@@ -1,4 +1,4 @@
-name = "cloudssh"
+name = "xcyunidc-webssh"
 main = "src/worker/index.ts"
 compatibility_date = "2026-07-01"
 workers_dev = true
@@ -32,7 +32,7 @@ new_sqlite_classes = ["SSHSessionDO", "UserDBDO"]
 # test 分支部署到独立 worker，共享 DO
 # 自定义域名请在 Cloudflare Dashboard 中手动绑定
 [env.test]
-name = "cloudssh-test"
+name = "xcyunidc-webssh-test"
 
 [env.test.vars]
 DEBUG_MODE = "true"
